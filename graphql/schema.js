@@ -90,8 +90,9 @@ module.exports = buildSchema(`
         createTeacher(teacherInput: TeacherInputData): Teacher!
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         createStudent(studentInput: StudentInputData): Student!
-        postTransaction(transactionInput: PostTransactionInputData): Transaction
+        toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
+        postTransaction(transactionInput: PostTransactionInputData): Transaction
     }
 
     schema {

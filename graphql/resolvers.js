@@ -6,6 +6,7 @@ const Transaction = require('../models/transaction');
 
 module.exports = {
     teacher: async function(args, req){
+
         const teacherId = req.teacher.id;
         const teacher = await Teacher.findOne({
             where: {
@@ -57,10 +58,18 @@ module.exports = {
         return student;
 
     },
+    toggleTreasureBox: async function({classId}, req){
+
+        const cls = await Class.findByPk(classId);
+        cls.treasureBoxOpen = !cls.treasureBoxOpen;
+        cls.save();
+
+    },
     postTransaction: async function({ transactionInput }, req){
 
         const student = await Student.findByPk(transactionInput.studentId);
 
+        // get student class and check if treasurebox is open before moving forward with transaction
         const studentClass = await Class.findByPk(student.classId);
         if(studentClass.treasureBoxOpen){
             // create transaction tied to the student
