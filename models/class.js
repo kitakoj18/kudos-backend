@@ -16,7 +16,12 @@ const Class = sequelize.define('class', {
     imageUrl: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
+    treasureBoxOpen: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0
+      }
 });
 
 module.exports = Class;

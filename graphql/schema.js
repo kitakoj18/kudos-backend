@@ -37,6 +37,7 @@ module.exports = buildSchema(`
         className: String!
         imageUrl: String
         teacherId: Int!
+        treasureBoxOpen: Boolean!
         students: [Student!]!
         prizes: [Prize!]!
     }
