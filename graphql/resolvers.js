@@ -60,33 +60,40 @@ module.exports = {
     postTransaction: async function({ transactionInput }, req){
 
         const student = await Student.findByPk(transactionInput.studentId);
-        // create transaction tied to the student
-        await student.createTransaction({prizeId: transactionInput.prizeId});
-        // deduct prize cost from student balance
-        student.kudosBalance -= transactionInput.kudosCost;
-        await student.save();
 
-        // get this transaction, which is the last transaction made by student to return for mutation
-        const transactions = await student.getTransactions();
-        const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
-        const lastTransaction = await Transaction.findOne({
-            where: {
-                id: lastTransactionId
-            },
-            attributes: {
-                exclude: ['createdAt', 'updatedAt']
-            },
-            include: [
-                {model: Prize,
-                    attributes: {
-                        exclude: ['id', 'createdAt', 'updatedAt']
+        const studentClass = await Class.findByPk(student.classId);
+        if(studentClass.treasureBoxOpen){
+            // create transaction tied to the student
+            student.createTransaction({prizeId: transactionInput.prizeId});
+            // deduct prize cost from student balance
+            student.kudosBalance -= transactionInput.kudosCost;
+            await student.save();
+
+            // get this transaction, which is the last transaction made by student to return for mutation
+            const transactions = await student.getTransactions();
+            const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
+            const lastTransaction = await Transaction.findOne({
+                where: {
+                    id: lastTransactionId
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                include: [
+                    {model: Prize,
+                        attributes: {
+                            exclude: ['id', 'createdAt', 'updatedAt']
+                        }
                     }
-                }
-            ]
-        });
+                ]
+            });
 
-        //console.log(lastTransaction.toJSON());
-        return lastTransaction.toJSON();
+            //console.log(lastTransaction.toJSON());
+            return lastTransaction.toJSON();
+        }
+        else{
+            // raise an error
+        }
     },
     approveTransaction: async function({ approveInput }, req){
 
@@ -106,8 +113,7 @@ module.exports = {
 
         const student = await Student.findByPk(studentId);
         const prize = await Prize.findByPk(prizeId);
-        const prizeCost = prize.kudosCost;
-        student.kudosBalance += prizeCost;
+        student.kudosBalance += prize.kudosCost;
         await student.save();
 
         return transaction;
