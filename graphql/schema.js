@@ -13,6 +13,7 @@ module.exports = buildSchema(`
         kudosBalance: Int!
         classId: Int!
         transactions: [Transaction!]!
+        wishList: [Wish!]!
     }
 
     type Prize {
@@ -30,6 +31,11 @@ module.exports = buildSchema(`
         approved: Boolean!
         prizeId: Int!
         studentId: Int!
+    }
+
+    type Wish {
+        id: Int!
+        prizeAvailable: Boolean!
     }
 
     type Class {
