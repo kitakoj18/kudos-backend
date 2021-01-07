@@ -9,6 +9,7 @@ const Class = require('./models/class');
 const Student = require('./models/student');
 const Prize = require('./models/prize');
 const Transaction = require('./models/transaction');
+const Wish = require('./models/wish');
 
 const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
@@ -107,6 +108,10 @@ Transaction.belongsTo(Student);
 Transaction.belongsTo(Prize);
 //Prize.hasOne(Transaction);
 //Transaction.hasOne(Prize)
+
+Student.hasMany(Wish);
+Wish.belongsTo(Student);
+Wish.belongsTo(Prize);
 
 let createdClass;
 
