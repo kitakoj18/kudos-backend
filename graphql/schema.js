@@ -82,6 +82,7 @@ module.exports = buildSchema(`
         lastName: String!
         email: String!
         password: String!
+        classId: Int!
     }
 
     input PrizeInputData {
@@ -113,8 +114,8 @@ module.exports = buildSchema(`
     type RootMutation {
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
-        createStudent(studentInput: StudentInputData): Student!
-        createPrize(prizeInput: PrizeInputData): Prize!
+        createStudent(studentInput: StudentInputData): Student
+        createPrize(prizeInput: PrizeInputData): Prize
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
