@@ -126,7 +126,7 @@ sequelize
     })
     .then(teacher =>{
         if(!teacher){
-            return Teacher.create({firstName: 'Oscar', lastName: 'Cano', email: 'cano@la.edu'});
+            return Teacher.create({firstName: 'Oscar', lastName: 'Cano', email: 'cano@la.edu', password: 'password', username: 'oscar'});
         }
         return teacher;
     })
