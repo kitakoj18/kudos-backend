@@ -58,12 +58,12 @@ module.exports = buildSchema(`
         classes: [Class!]!
     }
 
-    input TeacherInputData {
+    input NewTeacherInputData {
         firstName: String!
         lastName: String!
+        username: String!
         email: String!
-        imageUrl: String
-        biography: String
+        password: String!
     }
 
     input AdjustedBalance {
@@ -93,7 +93,7 @@ module.exports = buildSchema(`
     }
 
     type RootMutation {
-        createTeacher(teacherInput: TeacherInputData): Teacher!
+        createTeacher(teacherInput: NewTeacherInputData): Teacher
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         createStudent(studentInput: StudentInputData): Student!
         toggleTreasureBox(classId: Int!): Boolean
