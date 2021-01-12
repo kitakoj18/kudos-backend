@@ -88,6 +88,7 @@ module.exports = buildSchema(`
     input PrizeInputData {
         name: String!
         imageUrl: String!
+        classId: Int!
     }
 
     input AdjustedBalance {
