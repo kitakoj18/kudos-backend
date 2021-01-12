@@ -21,6 +21,10 @@ const Student = sequelize.define('student', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     imageUrl: Sequelize.STRING,
     biography: Sequelize.TEXT,
     favoriteSubject: Sequelize.STRING,
