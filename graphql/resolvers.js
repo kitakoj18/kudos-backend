@@ -151,6 +151,20 @@ module.exports = {
             lastName: studentInput.lastName,
             email: studentInput.email,
             password: hashedPw
+        });
+    },
+    createPrize: async function({ prizeInput }, req){
+
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        const cls = await Class.findByPk(prizeInput.classId);
+        cls.createPrize({
+            name: prizeInput.name,
+            imageUrl: prizeInput.imageUrl
         })
     },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
