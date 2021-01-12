@@ -9,6 +9,10 @@ const Teacher = sequelize.define('teacher', {
         allowNull: false,
         primaryKey: true
     },
+    username: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     firstName: {
         type: Sequelize.STRING,
         allowNull: false
@@ -18,6 +22,10 @@ const Teacher = sequelize.define('teacher', {
         allowNull: false
     },
     email: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    password: {
         type: Sequelize.STRING,
         allowNull: false
     },
