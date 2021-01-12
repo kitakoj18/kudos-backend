@@ -52,10 +52,11 @@ module.exports = buildSchema(`
         teacherId: Int!
         firstName: String!
         lastName: String!
+        username: String!
         email: String!
         imageUrl: String
         biography: String
-        classes: [Class!]!
+        classes: [Class]
     }
 
     input NewTeacherInputData {
