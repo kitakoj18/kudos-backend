@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const Teacher = require('../models/teacher');
 const Class = require('../models/class');
 const Student = require('../models/student');
@@ -13,7 +15,7 @@ module.exports = {
         const lastName = teacherInput.lastName;
         const username = teacherInput.username;
         const email = teacherInput.email;
-        const password = teacher.password;
+        const password = teacherInput.password;
 
         const condition = {
             [Op.or]: [
@@ -22,9 +24,14 @@ module.exports = {
             ]
         }
 
-        const existingTeacher = await Teacher.findOne(condition);
-        if(existingTeacher){
-            const error = new Error('This email or username already exists');
+        const existingTeacher = await Teacher.findOne({where: condition});
+        if(existingTeacher) {
+            let error;
+            if(existingTeacher.email === email) {
+                error = new Error('This email already exists');
+            } else {
+                error = new Error('This username already exists');
+            }
             throw error;
         }
 
