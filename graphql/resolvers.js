@@ -32,7 +32,7 @@ module.exports = {
         const teacher = await Teacher.create({
             firstName: firstName,
             lastName: lastName,
-            username = username,
+            username: username,
             email: email,
             password: hashedPw
         });
