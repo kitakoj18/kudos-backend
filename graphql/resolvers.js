@@ -4,7 +4,41 @@ const Student = require('../models/student');
 const Prize = require('../models/prize');
 const Transaction = require('../models/transaction');
 
+const Op = require('Sequelize').Op;
+
 module.exports = {
+    createTeacher: async function({ teacherInput }, req){
+
+        const firstName = teacherInput.firstName;
+        const lastName = teacherInput.lastName;
+        const username = teacherInput.username;
+        const email = teacherInput.email;
+        const password = teacher.password;
+
+        const condition = {
+            [Op.or]: [
+                {email: email},
+                {username: username}
+            ]
+        }
+
+        const existingTeacher = await Teacher.findOne(condition);
+        if(existingTeacher){
+            const error = new Error('This email or username already exists');
+            throw error;
+        }
+
+        const hashedPw = await bcrypt.hash(password, 12);
+        const teacher = await Teacher.create({
+            firstName: firstName,
+            lastName: lastName,
+            username = username,
+            email: email,
+            password: hashedPw
+        });
+
+        return teacher;
+    },
     teacher: async function(args, req){
 
         const teacherId = req.teacher.id;
