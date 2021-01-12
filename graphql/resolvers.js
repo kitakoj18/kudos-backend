@@ -1,10 +1,14 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const Teacher = require('../models/teacher');
 const Class = require('../models/class');
 const Student = require('../models/student');
 const Prize = require('../models/prize');
 const Transaction = require('../models/transaction');
+
+const dotenv = require('dotenv').config();
+const token_signature = process.env.JWT_SIGNATURE;
 
 const Op = require('Sequelize').Op;
 
@@ -45,6 +49,30 @@ module.exports = {
         });
 
         return teacher;
+    },
+    loginTeacher: async function({ teacherInput }, req){
+
+        const username = teacherInput.username;
+        const password = teacherInput.password;
+        const teacher = await Teacher.findOne({where: {username: username}});
+        if(!teacher) {
+            const error = new Error('Teacher with this username does not exist');
+            error.code = 401;
+            throw error;
+        }
+
+        const validPassword = await bcrypt.compare(password, teacher.password);
+        if(!validPassword) {
+            const error = new Error('Incorrect password. Please try again.');
+            error.code = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({
+            userId: teacher.id.toString(),
+        }, token_signature, {expiresIn: '1h'});
+
+        return {token: token, userId: teacher.userId};
     },
     teacher: async function(args, req){
 

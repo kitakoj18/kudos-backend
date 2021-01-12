@@ -59,11 +59,16 @@ module.exports = buildSchema(`
         classes: [Class!]
     }
 
-    input NewTeacherInputData {
-        firstName: String!
-        lastName: String!
+    type AuthData {
+        token: String!
+        userId: Int!
+    }
+
+    input TeacherInputData {
+        firstName: String
+        lastName: String
         username: String!
-        email: String!
+        email: String
         password: String!
     }
 
@@ -91,10 +96,11 @@ module.exports = buildSchema(`
 
     type RootQuery {
         teacher: Teacher!
+        loginTeacher(teacherInput: TeacherInputData): AuthData!
     }
 
     type RootMutation {
-        createTeacher(teacherInput: NewTeacherInputData): Teacher
+        createTeacher(teacherInput: TeacherInputData): Teacher
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         createStudent(studentInput: StudentInputData): Student!
         toggleTreasureBox(classId: Int!): Boolean
