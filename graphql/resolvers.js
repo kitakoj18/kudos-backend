@@ -76,7 +76,13 @@ module.exports = {
     },
     teacher: async function(args, req){
 
-        const teacherId = req.teacher.id;
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        const teacherId = req.userId;
         const teacher = await Teacher.findOne({
             where: {
                id: teacherId 
