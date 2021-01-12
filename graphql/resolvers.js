@@ -125,6 +125,34 @@ module.exports = {
 
         return teacher.toJSON();
     },
+    createClass: async function({ classInput }, req){
+
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        const teacher = await Teacher.findByPk(req.userId);
+        teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
+    },
+    createStudent: async function({ studentInput }, req) {
+
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        const cls = await Class.findByPk(studentInput.classId);
+        const hashedPw = await bcrypt.hash(studentInput.password, 12);
+        cls.createStudent({
+            firstName: studentInput.firstName,
+            lastName: studentInput.lastName,
+            email: studentInput.email,
+            password: hashedPw
+        })
+    },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
 
         const student = await Student.findByPk(adjustedBalanceData.studentId);
