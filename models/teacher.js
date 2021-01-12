@@ -9,15 +9,15 @@ const Teacher = sequelize.define('teacher', {
         allowNull: false,
         primaryKey: true
     },
-    username: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     firstName: {
         type: Sequelize.STRING,
         allowNull: false
     },
     lastName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    username: {
         type: Sequelize.STRING,
         allowNull: false
     },
