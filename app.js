@@ -19,9 +19,6 @@ const graphqlResolver = require('./graphql/resolvers');
 
 const app = express();
 
-// const teacherRoutes = require('./routes/teacherRoutes');
-// const studentRoutes = require('./routes/studentRoutes');
-
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) =>{
         cb(null, 'images');
@@ -84,20 +81,13 @@ Student.belongsTo(Class);
 Class.hasMany(Prize, {onDelete: 'CASCADE'});
 Prize.belongsTo(Class);
 
-// Teacher.hasMany(Prize, {onDelete: 'CASCADE'});
-// Prize.belongsTo(Teacher);
-
 Student.hasMany(Transaction);
 Transaction.belongsTo(Student);
 Transaction.belongsTo(Prize);
-//Prize.hasOne(Transaction);
-//Transaction.hasOne(Prize)
 
 Student.hasMany(Wish);
 Wish.belongsTo(Student);
 Wish.belongsTo(Prize);
-
-let createdClass;
 
 sequelize
     .sync({force:true})
