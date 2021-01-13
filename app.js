@@ -66,31 +66,12 @@ app.use((req, res, next) => {
 
 app.use(auth);
 
-app.use((req, res, next) =>{
-    Teacher.findByPk(1)
-        .then(teacher =>{
-            req.teacher = teacher;
-            return teacher;
-        })
-        .then(teacher =>{
-            return Student.findByPk(1);
-        })
-        .then(student =>{
-            req.student = student;
-            next()
-        })
-        .catch(err => console.log(err));
-})
-
 app.use('/graphql',
     graphqlHTTP({
         schema: graphqlSchema,
         rootValue: graphqlResolver
     })
 );
-
-// app.use('/teacher', teacherRoutes);
-// app.use('/student', studentRoutes);
 
 // per documentation, good to include both directions of the association
 // so that both models can have magic methods
@@ -120,28 +101,6 @@ let createdClass;
 
 sequelize
     .sync({force:true})
-    .then(result =>{
-        return Teacher.findByPk(1);
-    })
-    .then(teacher =>{
-        if(!teacher){
-            return Teacher.create({firstName: 'Oscar', lastName: 'Cano', email: 'cano@la.edu', password: 'password', username: 'oscar'});
-        }
-        return teacher;
-    })
-    .then(teacher =>{
-        return teacher.createClass({className: 'classRoom', imageUrl: 'imageUrl'});
-    })
-    .then(c =>{
-        createdClass = c;
-        return createdClass;
-    })
-    .then(c =>{
-        return createdClass.createStudent({firstName: 'Neil', lastName: 'Yonzon', email: 'neil@gmail.com'})
-    })
-    .then(student =>{
-        return createdClass.createPrize({name: 'Prize1', imageUrl: 'imageUrl'})
-    })
     .then(result =>{
         // console.log(result);
         app.listen(3000);
