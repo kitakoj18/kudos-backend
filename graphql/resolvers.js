@@ -145,6 +145,12 @@ module.exports = {
         }
 
         const cls = await Class.findByPk(studentInput.classId);
+        if(!cls){
+            const error = new Error(`Something went wrong! The class with id ${studentInput.classId} cannot be found!`);
+            error.code = 400;
+            throw error;
+        }
+
         const hashedPw = await bcrypt.hash(studentInput.password, 12);
         cls.createStudent({
             firstName: studentInput.firstName,
@@ -162,6 +168,12 @@ module.exports = {
         }
 
         const cls = await Class.findByPk(prizeInput.classId);
+        if(!cls){
+            const error = new Error(`Something went wrong! The class with id ${prizeInput.classId} cannot be found!`);
+            error.code = 400;
+            throw error;
+        }
+
         cls.createPrize({
             name: prizeInput.name,
             imageUrl: prizeInput.imageUrl
@@ -170,14 +182,26 @@ module.exports = {
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
 
         const student = await Student.findByPk(adjustedBalanceData.studentId);
+        if(!student){
+            const error = new Error(`Something went wrong! The student with id ${adjustedBalanceData.studentId} cannot be found!`);
+            error.code = 400;
+            throw error;
+        }
+
         student.balance = adjustedBalanceData.newBalance;
         await student.save();
         return student;
 
     },
-    toggleTreasureBox: async function({classId}, req){
+    toggleTreasureBox: async function({ classId }, req){
 
         const cls = await Class.findByPk(classId);
+        if(!cls){
+            const error = new Error(`Something went wrong! The class with id ${classId} cannot be found!`);
+            error.code = 400;
+            throw error;
+        }
+
         cls.treasureBoxOpen = !cls.treasureBoxOpen;
         cls.save();
 
