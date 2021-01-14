@@ -21,6 +21,7 @@ module.exports = buildSchema(`
         name: String!
         imageUrl: String!
         description: String
+        category: String
         kudosCost: Int!
         quantity: Int!
         classId: Int!

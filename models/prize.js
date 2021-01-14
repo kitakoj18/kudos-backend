@@ -18,6 +18,7 @@ const Prize = sequelize.define('prize', {
         allowNull: false
     },
     description: Sequelize.TEXT,
+    category: Sequelize.TEXT,
     kudosCost: {
         type: Sequelize.INTEGER,
         allowNull: false,
