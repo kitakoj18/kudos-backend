@@ -81,7 +81,7 @@ module.exports = buildSchema(`
     input StudentInputData {
         firstName: String!
         lastName: String!
-        email: String!
+        username: String!
         password: String!
         classId: Int!
     }

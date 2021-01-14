@@ -17,7 +17,7 @@ const Student = sequelize.define('student', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    email: {
+    username: {
         type: Sequelize.STRING,
         allowNull: false
     },

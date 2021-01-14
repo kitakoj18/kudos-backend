@@ -155,7 +155,7 @@ module.exports = {
         cls.createStudent({
             firstName: studentInput.firstName,
             lastName: studentInput.lastName,
-            email: studentInput.email,
+            username: studentInput.username,
             password: hashedPw
         });
     },
