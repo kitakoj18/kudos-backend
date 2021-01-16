@@ -89,6 +89,9 @@ module.exports = buildSchema(`
     input PrizeInputData {
         name: String!
         imageUrl: String!
+        kudosCost: Int!
+        description: String
+        category: String
         classId: Int!
     }
 
@@ -97,10 +100,10 @@ module.exports = buildSchema(`
         newBalance: Int!
     }
 
-    input PostTransactionInputData {
+    input PrizeTransactionInputData {
         studentId: Int!
         prizeId: Int!
-        kudosCost: Int!
+        kudosCost: Int
     }
 
     input ApproveTransactionInputData {
@@ -121,7 +124,8 @@ module.exports = buildSchema(`
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
-        postTransaction(transactionInput: PostTransactionInputData): Transaction
+        postTransaction(transactionInput: PrizeTransactionInputData): Transaction
+        addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
     }
 
     schema {
