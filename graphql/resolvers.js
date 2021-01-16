@@ -176,7 +176,10 @@ module.exports = {
 
         cls.createPrize({
             name: prizeInput.name,
-            imageUrl: prizeInput.imageUrl
+            imageUrl: prizeInput.imageUrl,
+            kudosCost: prizeInput.kudosCost,
+            description: prizeInput.description || '',
+            category: prizeInput.category || ''
         })
     },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
@@ -214,7 +217,7 @@ module.exports = {
         const studentClass = await Class.findByPk(student.classId);
         if(studentClass.treasureBoxOpen){
             // create transaction tied to the student
-            student.createTransaction({prizeId: transactionInput.prizeId});
+            student.createTransaction({ prizeId: transactionInput.prizeId });
             // deduct prize cost from student balance
             student.kudosBalance -= transactionInput.kudosCost;
             await student.save();
@@ -267,6 +270,10 @@ module.exports = {
         await student.save();
 
         return transaction;
-
+    },
+    addToWishlist: async function({ wishlistInput }, req){
+        
+        const student = await Student.findByPk(wishlistInput.studentId);
+        student.createWish({ prizeId: wishlistInput.prizeId })
     }
 };
