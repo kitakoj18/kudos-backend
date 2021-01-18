@@ -9,6 +9,8 @@ const Transaction = require('../models/transaction');
 
 const dotenv = require('dotenv').config();
 const token_signature = process.env.JWT_SIGNATURE;
+const teacher_signIn_type = process.env.TEACHER_TYPE;
+const student_signIn_type = process.env.STUDENT_TYPE;
 
 const Op = require('Sequelize').Op;
 
@@ -72,7 +74,7 @@ module.exports = {
             userId: teacher.id.toString(),
         }, token_signature, {expiresIn: '1h'});
 
-        return {token: token, userId: teacher.userId};
+        return {token: token, userId: teacher.userId, userType: teacher_signIn_type};
     },
     teacher: async function(args, req){
 
@@ -80,6 +82,11 @@ module.exports = {
             const error = new Error('Not authenticated!');
             error.code = 401;
             throw error;
+        }
+
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to access this page!');
+            error.code = 401;
         }
 
         const teacherId = req.userId;
