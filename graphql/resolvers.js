@@ -209,6 +209,29 @@ module.exports = {
         cls.save();
 
     },
+    approveTransaction: async function({ approveInput }, req){
+
+        const transaction = await Transaction.findByPk(approveInput.transactionId);
+
+        // if transaction is approved by teacher, change status to approved
+        if (approveInput.transactionApproved === true){
+            transaction.approved = 1;
+            await transaction.save();
+            return transaction;
+        }
+
+        // else, add cost of prize back to student's balance
+        // do we want to delete this transaction completely from the database?
+        const studentId = transaction.studentId;
+        const prizeId = transaction.prizeId;
+
+        const student = await Student.findByPk(studentId);
+        const prize = await Prize.findByPk(prizeId);
+        student.kudosBalance += prize.kudosCost;
+        await student.save();
+
+        return transaction;
+    },
     postTransaction: async function({ transactionInput }, req){
 
         const student = await Student.findByPk(transactionInput.studentId);
@@ -247,29 +270,6 @@ module.exports = {
         else{
             // raise an error
         }
-    },
-    approveTransaction: async function({ approveInput }, req){
-
-        const transaction = await Transaction.findByPk(approveInput.transactionId);
-
-        // if transaction is approved by teacher, change status to approved
-        if (approveInput.transactionApproved === true){
-            transaction.approved = 1;
-            await transaction.save();
-            return transaction;
-        }
-
-        // else, add cost of prize back to student's balance
-        // do we want to delete this transaction completely from the database?
-        const studentId = transaction.studentId;
-        const prizeId = transaction.prizeId;
-
-        const student = await Student.findByPk(studentId);
-        const prize = await Prize.findByPk(prizeId);
-        student.kudosBalance += prize.kudosCost;
-        await student.save();
-
-        return transaction;
     },
     addToWishlist: async function({ wishlistInput }, req){
         
