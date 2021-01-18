@@ -123,6 +123,12 @@ module.exports = {
             ]
         });
 
+        if(!teacher){
+            const error = new Error(`Something went wrong No teacher with id ${teacherId} can be found`);
+            error.code = 401;
+            throw error;
+        }
+
         return teacher.toJSON();
     },
     createClass: async function({ classInput }, req){
@@ -231,6 +237,9 @@ module.exports = {
         await student.save();
 
         return transaction;
+    },
+    student: async function(args, req){
+
     },
     postTransaction: async function({ transactionInput }, req){
 
