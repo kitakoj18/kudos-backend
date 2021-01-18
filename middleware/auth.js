@@ -27,5 +27,6 @@ module.exports = (req, res, next) => {
     //might need to do two separate auth middlewares for teachers and students
     req.userId = decodedToken.userId;
     req.isAuth = true;
+    req.userType = decodedToken.userType;
     next();
 }
