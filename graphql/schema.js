@@ -79,11 +79,11 @@ module.exports = buildSchema(`
     }
 
     input StudentInputData {
-        firstName: String!
-        lastName: String!
+        firstName: String
+        lastName: String
         username: String!
         password: String!
-        classId: Int!
+        classId: Int
     }
 
     input PrizeInputData {
@@ -114,6 +114,8 @@ module.exports = buildSchema(`
     type RootQuery {
         teacher: Teacher!
         loginTeacher(teacherInput: TeacherInputData): AuthData!
+        student: Student!
+        loginStudent(studentInput: StudentInputData): AuthData!
     }
 
     type RootMutation {
