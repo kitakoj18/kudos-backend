@@ -74,7 +74,7 @@ module.exports = {
             userId: teacher.id.toString(),
         }, token_signature, {expiresIn: '1h'});
 
-        return {token: token, userId: teacher.userId, userType: teacher_signIn_type};
+        return {token: token, userId: teacher.id, userType: teacher_signIn_type};
     },
     teacher: async function(args, req){
 
@@ -244,6 +244,31 @@ module.exports = {
         await student.save();
 
         return transaction;
+    },
+    loginStudent: async function({ studentInput }, req){
+
+        const username = studentInput.username;
+        const password = studentInput.password;
+        const student = Student.findOne({where: {username: username}});
+
+        if(!student){
+            const error = new Error('Student with this username does not exist!');
+            error.code = 400;
+            throw error;
+        }
+
+        const validPassword = await bcrypt.compare(password, student.password);
+        if(!validPassword) {
+            const error = new Error('Incorrect password. Please try again.');
+            error.code = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({
+            userId: student.id.toString(),
+        }, token_signature, {expiresIn: '1h'});
+
+        return {token: token, userId: student.id, userType: student_signIn_type};
     },
     student: async function(args, req){
 
