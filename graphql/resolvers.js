@@ -6,6 +6,7 @@ const Class = require('../models/class');
 const Student = require('../models/student');
 const Prize = require('../models/prize');
 const Transaction = require('../models/transaction');
+const Wish = require('../models/wish');
 
 const dotenv = require('dotenv').config();
 const token_signature = process.env.JWT_SIGNATURE;
@@ -272,6 +273,49 @@ module.exports = {
     },
     student: async function(args, req){
 
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        if(req.userType !== student_signIn_type){
+            const error = new Error('Sorry, you must be a student to access this page!');
+            error.code = 401;
+        }
+
+        const studentId = req.userId;
+        const student = await Student.findOne({
+            where: {
+               id: studentId 
+            },
+            attributes: {
+                include: [['id', 'studentId']],
+                exclude: ['id', 'createdAt', 'updatedAt']
+            },
+            include: [
+                {
+                    model: Transaction,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        }
+                },
+                {
+                    model: Wish,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        }
+                }
+            ]
+        });
+
+        if(!student){
+            const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
+            error.code = 401;
+            throw error;
+        }
+
+        return student.toJSON();
     },
     postTransaction: async function({ transactionInput }, req){
 
