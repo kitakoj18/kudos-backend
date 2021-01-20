@@ -147,6 +147,11 @@ module.exports = {
             throw error;
         }
 
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to create a new class!');
+            error.code = 401;
+        }
+
         const teacher = await Teacher.findByPk(req.userId);
         teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
     },
@@ -156,6 +161,11 @@ module.exports = {
             const error = new Error('Not authenticated!');
             error.code = 401;
             throw error;
+        }
+
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to create a new student!');
+            error.code = 401;
         }
 
         const cls = await Class.findByPk(studentInput.classId);
@@ -181,6 +191,11 @@ module.exports = {
             throw error;
         }
 
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to create a new prize!');
+            error.code = 401;
+        }
+
         const cls = await Class.findByPk(prizeInput.classId);
         if(!cls){
             const error = new Error(`Something went wrong! The class with id ${prizeInput.classId} cannot be found!`);
@@ -198,6 +213,11 @@ module.exports = {
     },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
 
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to perform this action!');
+            error.code = 401;
+        }
+
         const student = await Student.findByPk(adjustedBalanceData.studentId);
         if(!student){
             const error = new Error(`Something went wrong! The student with id ${adjustedBalanceData.studentId} cannot be found!`);
@@ -212,6 +232,11 @@ module.exports = {
     },
     toggleTreasureBox: async function({ classId }, req){
 
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to perform this action!');
+            error.code = 401;
+        }
+
         const cls = await Class.findByPk(classId);
         if(!cls){
             const error = new Error(`Something went wrong! The class with id ${classId} cannot be found!`);
@@ -224,6 +249,11 @@ module.exports = {
 
     },
     approveTransaction: async function({ approveInput }, req){
+
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to perform this action!');
+            error.code = 401;
+        }
 
         const transaction = await Transaction.findByPk(approveInput.transactionId);
 
