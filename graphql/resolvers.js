@@ -183,6 +183,21 @@ module.exports = {
             password: hashedPw
         });
     },
+    deleteStudents: async function({ studentInput }, req){
+
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to create a new prize!');
+            error.code = 401;
+        }
+
+        Student.destroy({ where: { id: studentInput.studentIds } })
+    },
     createPrize: async function({ prizeInput }, req){
 
         if(!req.isAuth){

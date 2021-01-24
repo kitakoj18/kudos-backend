@@ -86,6 +86,10 @@ module.exports = buildSchema(`
         classId: Int
     }
 
+    input DeleteStudentsData {
+        studentIds: [Int!]!
+    }
+
     input PrizeInputData {
         name: String!
         imageUrl: String!
@@ -122,6 +126,7 @@ module.exports = buildSchema(`
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
+        deleteStudents(studentInput: DeleteStudentsData)
         createPrize(prizeInput: PrizeInputData): Prize
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
