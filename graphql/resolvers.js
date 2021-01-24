@@ -364,42 +364,72 @@ module.exports = {
     },
     postTransaction: async function({ transactionInput }, req){
 
-        const student = await Student.findByPk(transactionInput.studentId);
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        if(req.userType !== student_signIn_type){
+            const error = new Error('Sorry, you must be a student to access this page!');
+            error.code = 401;
+        }
+
+        const student = await Student.findByPk(req.userId);
+        if(!student){
+            const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
+            error.code = 404;
+            throw error;
+        }
 
         // get student class and check if treasurebox is open before moving forward with transaction
         const studentClass = await Class.findByPk(student.classId);
-        if(studentClass.treasureBoxOpen){
-            // create transaction tied to the student
-            student.createTransaction({ prizeId: transactionInput.prizeId });
-            // deduct prize cost from student balance
-            student.kudosBalance -= transactionInput.kudosCost;
-            await student.save();
+        if(!studentClass){
+            const error = new Error(`Something went wrong No class with id ${student.classId} can be found`);
+            error.code = 404;
+            throw error;
+        }
 
-            // get this transaction, which is the last transaction made by student to return for mutation
-            const transactions = await student.getTransactions();
-            const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
-            const lastTransaction = await Transaction.findOne({
-                where: {
-                    id: lastTransactionId
-                },
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
-                },
-                include: [
-                    {model: Prize,
-                        attributes: {
-                            exclude: ['id', 'createdAt', 'updatedAt']
-                        }
+        if(!studentClass.treasureBoxOpen){
+            const error = new Error('The treasure box for your class is currently not open!');
+            error.code = 404;
+            throw error;
+        }
+
+        const prize = await Prize.findByPk(transactionInput.prizeId);
+        if(prize.quantity < 1){
+            const error = new Error(`I'm sorry! The prize ${prize.name} is not available right now. Please try again later!`);
+            error.code = 404;
+            throw error;
+        }
+        
+        // create transaction tied to the student
+        student.createTransaction({ prizeId: transactionInput.prizeId });
+        // deduct prize cost from student balance
+        student.kudosBalance -= transactionInput.kudosCost;
+        await student.save();
+
+        // get this transaction, which is the last transaction made by student to return for mutation
+        const transactions = await student.getTransactions();
+        const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
+        const lastTransaction = await Transaction.findOne({
+            where: {
+                id: lastTransactionId
+            },
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            },
+            include: [
+                {model: Prize,
+                    attributes: {
+                        exclude: ['id', 'createdAt', 'updatedAt']
                     }
-                ]
-            });
+                }
+            ]
+        });
 
-            //console.log(lastTransaction.toJSON());
-            return lastTransaction.toJSON();
-        }
-        else{
-            // raise an error
-        }
+        //console.log(lastTransaction.toJSON());
+        return lastTransaction.toJSON();
     },
     addToWishlist: async function({ wishlistInput }, req){
         
