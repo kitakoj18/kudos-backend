@@ -96,7 +96,9 @@ module.exports = buildSchema(`
         kudosCost: Int!
         description: String
         category: String
-        classId: Int!
+        quantity: Int!
+        classId: Int
+        prizeId: Int
     }
 
     input AdjustedBalance {
@@ -126,6 +128,7 @@ module.exports = buildSchema(`
         createStudent(studentInput: StudentInputData): Student
         deleteStudents(studentInput: DeleteStudentsData)
         createPrize(prizeInput: PrizeInputData): Prize
+        editPrize(prizeInput: PrizeInputData): Prize
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
