@@ -105,9 +105,7 @@ module.exports = buildSchema(`
     }
 
     input PrizeTransactionInputData {
-        studentId: Int!
         prizeId: Int!
-        kudosCost: Int
     }
 
     input ApproveTransactionInputData {
