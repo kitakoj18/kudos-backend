@@ -436,7 +436,7 @@ module.exports = {
         // create transaction tied to the student
         student.createTransaction({ prizeId: transactionInput.prizeId });
         // deduct prize cost from student balance
-        student.kudosBalance -= transactionInput.kudosCost;
+        student.kudosBalance -= prize.kudosCost;
         await student.save();
 
         // get this transaction, which is the last transaction made by student to return for mutation
