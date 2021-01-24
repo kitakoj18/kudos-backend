@@ -463,7 +463,23 @@ module.exports = {
     },
     addToWishlist: async function({ wishlistInput }, req){
         
-        const student = await Student.findByPk(wishlistInput.studentId);
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        if(req.userType !== student_signIn_type){
+            const error = new Error('Sorry, you must be a student to access this page!');
+            error.code = 401;
+        }
+
+        const student = await Student.findByPk(req.userId);
+        if(!student){
+            const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
+            error.code = 404;
+            throw error;
+        }
         student.createWish({ prizeId: wishlistInput.prizeId })
     }
 };
