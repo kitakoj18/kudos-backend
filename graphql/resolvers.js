@@ -223,8 +223,38 @@ module.exports = {
             imageUrl: prizeInput.imageUrl,
             kudosCost: prizeInput.kudosCost,
             description: prizeInput.description || '',
-            category: prizeInput.category || ''
+            category: prizeInput.category || '',
+            quantity: prizeInput.quantity
         })
+    },
+    editPrize: async function({ prizeInput }, req){
+
+        if(!req.isAuth){
+            const error = new Error('Not authenticated!');
+            error.code = 401;
+            throw error;
+        }
+
+        if(req.userType !== teacher_signIn_type){
+            const error = new Error('Sorry, you must be a teacher to create a new prize!');
+            error.code = 401;
+            throw error;
+        }
+
+        const prize = await Prize.findByPk(prizeInput.prizeId);
+        if(!prize){
+            const error = new Error(`Something went wrong! The prize with id ${prizeInput.prizeId} cannot be found!`);;
+            error.code = 404;
+            throw error;
+        }
+
+        prize.name = prizeInput.name;
+        prize.imageUrl = prizeInput.imageUrl;
+        prize.kudosCost = prizeInput.kudosCost;
+        prize.description = prizeInput.description || '';
+        prize.category = prizeInput.category || '';
+        prize.quantity = prizeInput.quantity;
+        await prize.save();
     },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
 
