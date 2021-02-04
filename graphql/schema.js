@@ -6,7 +6,7 @@ module.exports = buildSchema(`
         studentId: Int!
         firstName: String!
         lastName: String!
-        email: String!
+        username: String!
         imageUrl: String
         biography: String
         favoriteSubject: String
@@ -126,7 +126,7 @@ module.exports = buildSchema(`
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
-        deleteStudents(studentInput: DeleteStudentsData)
+        deleteStudents(studentInput: DeleteStudentsData): Student
         createPrize(prizeInput: PrizeInputData): Prize
         editPrize(prizeInput: PrizeInputData): Prize
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
