@@ -90,7 +90,7 @@ Wish.belongsTo(Student);
 Wish.belongsTo(Prize);
 
 sequelize
-    .sync()
+    .sync({force: true})
     .then(result =>{
         // console.log(result);
         app.listen(3000);
