@@ -166,7 +166,6 @@ module.exports = {
         if(req.userType !== teacher_signIn_type){
             const error = new Error('Sorry, you must be a teacher to create a new student!');
             error.code = 401;
-            throw error;
         }
 
         const cls = await Class.findByPk(studentInput.classId);
@@ -176,7 +175,9 @@ module.exports = {
             throw error;
         }
 
-        const student = await Student.findOne({username: studentInput.username});
+        const student = await Student.findOne({where: {
+            username: studentInput.username 
+         }});
         if(student){
             const error = new Error('A student with this username already exists!');
             error.code = 401;
