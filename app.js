@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const helmet = require('helmet');
 
 const sequelize = require('./util/database');
 const Teacher = require('./models/teacher');
@@ -62,6 +63,8 @@ app.use((req, res, next) => {
   });
 
 app.use(auth);
+
+app.use(helmet());
 
 app.use('/graphql',
     graphqlHTTP({
