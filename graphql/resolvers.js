@@ -13,7 +13,7 @@ const token_signature = process.env.JWT_SIGNATURE;
 const teacher_signIn_type = process.env.TEACHER_TYPE;
 const student_signIn_type = process.env.STUDENT_TYPE;
 
-const Op = require('Sequelize').Op;
+const Op = require('sequelize').Op;
 
 module.exports = {
     createTeacher: async function({ teacherInput }, req){
