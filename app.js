@@ -5,7 +5,7 @@ const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
 
-const sequelize = require('./util/database');
+const sqlize = require('./util/database');
 const Teacher = require('./models/teacher');
 const Class = require('./models/class');
 const Student = require('./models/student');
@@ -94,7 +94,7 @@ Student.hasMany(Wish);
 Wish.belongsTo(Student);
 Wish.belongsTo(Prize);
 
-sequelize
+sqlize
     .sync({force: true})
     .then(result =>{
         // console.log(result);
