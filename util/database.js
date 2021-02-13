@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 
 const dotenv = require('dotenv').config();
 
@@ -20,7 +20,7 @@ if(process.env.NODE_ENV === 'production'){
 // const aws_db_host = process.env.AWS_DB_HOST;
 // const aws_db_port = process.env.AWS_DB_PORT;
 
-const sequelize = new Sequelize('kudos', 'root', db_pw, {
+const sequelize = new sequelize('kudos', 'root', db_pw, {
     dialect: 'mysql', 
     host: db_host,
     port: db_port
