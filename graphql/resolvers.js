@@ -9,9 +9,9 @@ const Transaction = require('../models/transaction');
 const Wish = require('../models/wish');
 
 const dotenv = require('dotenv').config();
-const token_signature = process.env.JWT_SIGNATURE;
-const teacher_signIn_type = process.env.TEACHER_TYPE;
-const student_signIn_type = process.env.STUDENT_TYPE;
+const tokenSignature = process.env.JWT_SIGNATURE;
+const teacherSignInType = process.env.TEACHER_TYPE;
+const studentSignInType = process.env.STUDENT_TYPE;
 
 const Op = require('sequelize').Op;
 
@@ -73,9 +73,10 @@ module.exports = {
 
         const token = jwt.sign({
             userId: teacher.id.toString(),
-        }, token_signature, {expiresIn: '1h'});
+            userType: teacherSignInType
+        }, tokenSignature, {expiresIn: '1h'});
 
-        return {token: token, userId: teacher.id, userType: teacher_signIn_type};
+        return {token: token, userId: teacher.id};
     },
     teacher: async function(args, req){
 
@@ -85,9 +86,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to access this page!');
             error.code = 401;
+            throw error;
         }
 
         const teacherId = req.userId;
@@ -147,9 +149,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to create a new class!');
             error.code = 401;
+            throw error;
         }
 
         const teacher = await Teacher.findByPk(req.userId);
@@ -163,9 +166,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to create a new student!');
             error.code = 401;
+            throw error;
         }
 
         const cls = await Class.findByPk(studentInput.classId);
@@ -200,9 +204,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to create a new prize!');
             error.code = 401;
+            throw error;
         }
 
         Student.destroy({ where: { id: studentInput.studentIds } })
@@ -215,9 +220,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to create a new prize!');
             error.code = 401;
+            throw error;
         }
 
         const cls = await Class.findByPk(prizeInput.classId);
@@ -244,7 +250,7 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to create a new prize!');
             error.code = 401;
             throw error;
@@ -267,9 +273,10 @@ module.exports = {
     },
     adjustStudentBalance: async function({ adjustedBalanceData }, req){
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to perform this action!');
             error.code = 401;
+            throw error;
         }
 
         const student = await Student.findByPk(adjustedBalanceData.studentId);
@@ -286,9 +293,10 @@ module.exports = {
     },
     toggleTreasureBox: async function({ classId }, req){
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to perform this action!');
             error.code = 401;
+            throw error;
         }
 
         const cls = await Class.findByPk(classId);
@@ -304,9 +312,10 @@ module.exports = {
     },
     approveTransaction: async function({ approveInput }, req){
 
-        if(req.userType !== teacher_signIn_type){
+        if(req.userType !== teacherSignInType){
             const error = new Error('Sorry, you must be a teacher to perform this action!');
             error.code = 401;
+            throw error;
         }
 
         const transaction = await Transaction.findByPk(approveInput.transactionId);
@@ -351,9 +360,10 @@ module.exports = {
 
         const token = jwt.sign({
             userId: student.id.toString(),
-        }, token_signature, {expiresIn: '1h'});
+            userType: studentSignInType
+        }, tokenSignature, {expiresIn: '1h'});
 
-        return {token: token, userId: student.id, userType: student_signIn_type};
+        return {token: token, userId: student.id};
     },
     student: async function(args, req){
 
@@ -363,9 +373,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== student_signIn_type){
+        if(req.userType !== studentSignInType){
             const error = new Error('Sorry, you must be a student to access this page!');
             error.code = 401;
+            throw error;
         }
 
         const studentId = req.userId;
@@ -409,9 +420,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== student_signIn_type){
+        if(req.userType !== studentSignInType){
             const error = new Error('Sorry, you must be a student to access this page!');
             error.code = 401;
+            throw error;
         }
 
         const student = await Student.findByPk(req.userId);
@@ -478,9 +490,10 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== student_signIn_type){
+        if(req.userType !== studentSignInType){
             const error = new Error('Sorry, you must be a student to access this page!');
             error.code = 401;
+            throw error;
         }
 
         const student = await Student.findByPk(req.userId);
