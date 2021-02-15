@@ -428,7 +428,7 @@ module.exports = {
 
         const student = await Student.findByPk(req.userId);
         if(!student){
-            const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
+            const error = new Error(`Something went wrong! No student with id ${studentId} can be found`);
             error.code = 404;
             throw error;
         }
@@ -436,7 +436,7 @@ module.exports = {
         // get student class and check if treasurebox is open before moving forward with transaction
         const studentClass = await Class.findByPk(student.classId);
         if(!studentClass){
-            const error = new Error(`Something went wrong No class with id ${student.classId} can be found`);
+            const error = new Error(`Something went wrong! No class with id ${student.classId} can be found`);
             error.code = 404;
             throw error;
         }
@@ -448,6 +448,9 @@ module.exports = {
         }
 
         const prize = await Prize.findByPk(transactionInput.prizeId);
+        if(!prize){
+            const error = new Error(`Something went wrong! No prize with id ${transactionInput.prizeId} can be found`)
+        }
         if(prize.quantity < 1){
             const error = new Error(`I'm sorry! The prize ${prize.name} is not available right now. Please try again later!`);
             error.code = 404;
@@ -455,7 +458,7 @@ module.exports = {
         }
         
         // create transaction tied to the student
-        student.createTransaction({ prizeId: transactionInput.prizeId });
+        student.createTransaction({ prizeId: transactionInput.prizeId, prizeName: prize.name, prizeImageUrl: prize.imageUrl });
         // deduct prize cost from student balance
         student.kudosBalance -= prize.kudosCost;
         await student.save();
