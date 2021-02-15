@@ -467,27 +467,30 @@ module.exports = {
         student.kudosBalance -= prize.kudosCost;
         await student.save();
 
+        prize.quantity -= 1
+        await prize.save();
+
         // get this transaction, which is the last transaction made by student to return for mutation
-        const transactions = await student.getTransactions();
-        const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
-        const lastTransaction = await Transaction.findOne({
-            where: {
-                id: lastTransactionId
-            },
-            attributes: {
-                exclude: ['createdAt', 'updatedAt']
-            },
-            include: [
-                {model: Prize,
-                    attributes: {
-                        exclude: ['id', 'createdAt', 'updatedAt']
-                    }
-                }
-            ]
-        });
+        // const transactions = await student.getTransactions();
+        // const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
+        // const lastTransaction = await Transaction.findOne({
+        //     where: {
+        //         id: lastTransactionId
+        //     },
+        //     attributes: {
+        //         exclude: ['createdAt', 'updatedAt']
+        //     },
+        //     include: [
+        //         {model: Prize,
+        //             attributes: {
+        //                 exclude: ['id', 'createdAt', 'updatedAt']
+        //             }
+        //         }
+        //     ]
+        // });
 
         //console.log(lastTransaction.toJSON());
-        return lastTransaction.toJSON();
+        //return lastTransaction.toJSON();
     },
     addToWishlist: async function({ wishlistInput }, req){
         
