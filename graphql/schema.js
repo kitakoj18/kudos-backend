@@ -31,6 +31,8 @@ module.exports = buildSchema(`
         id: Int!
         approved: Boolean!
         prizeId: Int!
+        prizeName: String!
+        prizeImageUrl: String!
         studentId: Int!
     }
 
