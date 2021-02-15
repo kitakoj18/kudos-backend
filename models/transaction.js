@@ -21,6 +21,10 @@ const Transaction = sequelize.define('transaction', {
   prizeImageUrl: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  prizeCost: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   }
   // prizeId: {
   //   type: Sequelize.INTEGER,

@@ -33,6 +33,7 @@ module.exports = buildSchema(`
         prizeId: Int!
         prizeName: String!
         prizeImageUrl: String!
+        prizeCost: Int!
         studentId: Int!
     }
 

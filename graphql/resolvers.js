@@ -420,11 +420,11 @@ module.exports = {
             throw error;
         }
 
-        if(req.userType !== studentSignInType){
-            const error = new Error('Sorry, you must be a student to access this page!');
-            error.code = 401;
-            throw error;
-        }
+        // if(req.userType !== studentSignInType){
+        //     const error = new Error('Sorry, you must be a student to access this page!');
+        //     error.code = 401;
+        //     throw error;
+        // }
 
         const student = await Student.findByPk(req.userId);
         if(!student){
@@ -458,7 +458,11 @@ module.exports = {
         }
         
         // create transaction tied to the student
-        student.createTransaction({ prizeId: transactionInput.prizeId, prizeName: prize.name, prizeImageUrl: prize.imageUrl });
+        student.createTransaction({ 
+            prizeId: transactionInput.prizeId, 
+            prizeName: prize.name, 
+            prizeImageUrl: prize.imageUrl, 
+            prizeCost: prize.kudosCost });
         // deduct prize cost from student balance
         student.kudosBalance -= prize.kudosCost;
         await student.save();
