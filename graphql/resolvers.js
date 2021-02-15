@@ -337,6 +337,9 @@ module.exports = {
         student.kudosBalance += prize.kudosCost;
         await student.save();
 
+        prize.quantity += 1;
+        await prize.save();
+
         return transaction;
     },
     loginStudent: async function({ studentInput }, req){
