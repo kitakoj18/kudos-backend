@@ -95,7 +95,7 @@ Wish.belongsTo(Student);
 Wish.belongsTo(Prize);
 
 sqlize
-    .sync({force: true})
+    .sync()
     .then(result =>{
         // console.log(result);
         app.listen(process.env.PORT || 3000);
