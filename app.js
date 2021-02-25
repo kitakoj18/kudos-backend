@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -45,7 +46,7 @@ const fileFilter = (req, file, cb) =>{
 app.use(bodyParser.json());
 
 app.use(
-    multer({storage: fileStorage, fileFilter: fileFilter}).single('iamge')
+    multer({storage: fileStorage, fileFilter: fileFilter}).single('image')
 );
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -64,6 +65,19 @@ app.use((req, res, next) => {
   });
 
 app.use(auth);
+
+app.put('/post-iamge', (req, res, next) =>{
+    if(!req.isAuth){
+        throw new Error('Not Authenticated!')
+    }
+    if(!req.file){
+        return res.status(200).json({ message: 'No file was provided!' })
+    }
+    if(req.body.oldPath){
+        clearImage(req.body.oldPath)
+    }
+    return res.status(201).json({ message: 'File stored successfully', filePath: req.file.path })
+})
 
 app.use(helmet());
 app.use(compression());
@@ -101,3 +115,8 @@ sqlize
         app.listen(process.env.PORT || 3000);
     })
     .catch(err => console.log(err));
+
+const clearImage = filePath =>{
+    filePath = path.join(__dirname, '..', filePath)
+    fs.unlink(filePath, err => console.log(err))
+}
