@@ -16,11 +16,18 @@ const Wish = require('./models/wish');
 
 const auth = require('./middleware/auth');
 
-const { graphqlHTTP } = require('express-graphql');
-const graphqlSchema = require('./graphql/schema');
-const graphqlResolver = require('./graphql/resolvers');
+const { ApolloServer } = require('apollo-server-express');
+const typeDefs = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req, res }) => ({ req, res })
+})
 
 const app = express();
+server.applyMiddleware({ app });
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) =>{
@@ -81,13 +88,6 @@ app.put('/post-iamge', (req, res, next) =>{
 
 app.use(helmet());
 app.use(compression());
-
-app.use('/graphql',
-    graphqlHTTP({
-        schema: graphqlSchema,
-        rootValue: graphqlResolver
-    })
-);
 
 // per documentation, good to include both directions of the association
 // so that both models can have magic methods
