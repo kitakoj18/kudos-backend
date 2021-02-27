@@ -1,6 +1,6 @@
-const { buildSchema } = require('graphql');
+const { gql } = require('apollo-server');
 
-module.exports = buildSchema(`
+const typeDefs = gql`
 
     type Student {
         studentId: Int!
@@ -144,4 +144,6 @@ module.exports = buildSchema(`
         mutation: RootMutation
     }
 
-`);
+`;
+
+module.exports = typeDefs;
