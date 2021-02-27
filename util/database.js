@@ -23,7 +23,8 @@ if(process.env.NODE_ENV === 'production'){
 const sqlize = new sequelize('kudos', 'root', db_pw, {
     dialect: 'mysql', 
     host: db_host,
-    port: db_port
+    port: db_port,
+    logging: process.env.NODE_ENV === 'production' ? false : true
 });
 
 module.exports = sqlize; 
