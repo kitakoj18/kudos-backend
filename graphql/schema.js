@@ -118,14 +118,14 @@ const typeDefs = gql`
         transactionApproved: Boolean!
     }
 
-    type RootQuery {
+    type Query {
         teacher: Teacher!
         loginTeacher(teacherInput: TeacherInputData): AuthData!
         student: Student!
         loginStudent(studentInput: StudentInputData): AuthData!
     }
 
-    type RootMutation {
+    type Mutation {
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
@@ -138,12 +138,6 @@ const typeDefs = gql`
         postTransaction(transactionInput: PrizeTransactionInputData): Transaction
         addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
     }
-
-    schema {
-        query: RootQuery
-        mutation: RootMutation
-    }
-
 `;
 
 module.exports = typeDefs;
