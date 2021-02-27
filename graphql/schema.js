@@ -120,12 +120,12 @@ const typeDefs = gql`
 
     type Query {
         teacher: Teacher!
-        loginTeacher(teacherInput: TeacherInputData): AuthData!
         student: Student!
-        loginStudent(studentInput: StudentInputData): AuthData!
     }
 
     type Mutation {
+        loginTeacher(teacherInput: TeacherInputData): AuthData!
+        loginStudent(studentInput: StudentInputData): AuthData!
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
