@@ -27,7 +27,6 @@ const server = new ApolloServer({
 })
 
 const app = express();
-server.applyMiddleware({ app });
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) =>{
@@ -88,6 +87,8 @@ app.put('/post-iamge', (req, res, next) =>{
 
 app.use(helmet());
 app.use(compression());
+
+server.applyMiddleware({ app });
 
 // per documentation, good to include both directions of the association
 // so that both models can have magic methods
