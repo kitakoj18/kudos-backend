@@ -17,7 +17,7 @@ const Op = require('sequelize').Op;
 
 module.exports = {
     Query: {
-        teacher: async function(args, req){
+        teacher: async function(_, __, { req }){
 
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -80,7 +80,7 @@ module.exports = {
     
             return teacher.toJSON();
         },
-        student: async function(args, req){
+        student: async function(_, __, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -129,7 +129,7 @@ module.exports = {
         }
     },
     Mutation: {
-        createTeacher: async function({ teacherInput }, req){
+        createTeacher: async function(_, { teacherInput }){
 
             const firstName = teacherInput.firstName;
             const lastName = teacherInput.lastName;
@@ -166,7 +166,7 @@ module.exports = {
     
             return teacher;
         },
-        loginTeacher: async function({ teacherInput }, req){
+        loginTeacher: async function(_, { teacherInput }, { req }){
     
             const username = teacherInput.username;
             const password = teacherInput.password;
@@ -191,7 +191,7 @@ module.exports = {
     
             return {token: token, userId: teacher.id};
         },
-        createClass: async function({ classInput }, req){
+        createClass: async function(_, { classInput }, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -208,7 +208,7 @@ module.exports = {
             const teacher = await Teacher.findByPk(req.userId);
             teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
         },
-        createStudent: async function({ studentInput }, req) {
+        createStudent: async function(_, { studentInput }, { req }) {
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -246,7 +246,7 @@ module.exports = {
                 password: hashedPw
             });
         },
-        deleteStudents: async function({ studentInput }, req){
+        deleteStudents: async function(_, { studentInput }, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -262,7 +262,7 @@ module.exports = {
     
             Student.destroy({ where: { id: studentInput.studentIds } })
         },
-        createPrize: async function({ prizeInput }, req){
+        createPrize: async function(_, { prizeInput }, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -292,7 +292,7 @@ module.exports = {
                 quantity: prizeInput.quantity
             })
         },
-        editPrize: async function({ prizeInput }, req){
+        editPrize: async function(_, { prizeInput }, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -321,7 +321,7 @@ module.exports = {
             prize.quantity = prizeInput.quantity;
             await prize.save();
         },
-        adjustStudentBalance: async function({ adjustedBalanceData }, req){
+        adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     
             if(req.userType !== teacherSignInType){
                 const error = new Error('Sorry, you must be a teacher to perform this action!');
@@ -341,7 +341,7 @@ module.exports = {
             return student;
     
         },
-        toggleTreasureBox: async function({ classId }, req){
+        toggleTreasureBox: async function(_, { classId }, { req }){
     
             if(req.userType !== teacherSignInType){
                 const error = new Error('Sorry, you must be a teacher to perform this action!');
@@ -360,7 +360,7 @@ module.exports = {
             cls.save();
     
         },
-        approveTransaction: async function({ approveInput }, req){
+        approveTransaction: async function(_, { approveInput }, { req }){
     
             if(req.userType !== teacherSignInType){
                 const error = new Error('Sorry, you must be a teacher to perform this action!');
@@ -392,7 +392,7 @@ module.exports = {
     
             return transaction;
         },
-        loginStudent: async function({ studentInput }, req){
+        loginStudent: async function(_, { studentInput }){
     
             const username = studentInput.username;
             const password = studentInput.password;
@@ -418,7 +418,7 @@ module.exports = {
     
             return {token: token, userId: student.id};
         },
-        postTransaction: async function({ transactionInput }, req){
+        postTransaction: async function(_, { transactionInput }, { req }){
     
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
@@ -498,7 +498,7 @@ module.exports = {
             //console.log(lastTransaction.toJSON());
             //return lastTransaction.toJSON();
         },
-        addToWishlist: async function({ wishlistInput }, req){
+        addToWishlist: async function(_, { wishlistInput }, { req }){
             
             if(!req.isAuth){
                 const error = new Error('Not authenticated!');
