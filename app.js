@@ -2,9 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
+
+const dotenv = require('dotenv').config();
+const accessTokenSignature = process.env.A_JWT_SIGNATURE;
+const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 
 const sqlize = require('./util/database');
 const Teacher = require('./models/teacher');
@@ -51,6 +56,8 @@ const fileFilter = (req, file, cb) =>{
 
 app.use(bodyParser.json());
 
+app.use(cookieParser());
+
 app.use(
     multer({storage: fileStorage, fileFilter: fileFilter}).single('image')
 );
@@ -71,6 +78,49 @@ app.use((req, res, next) => {
   });
 
 app.use(auth);
+
+app.post('/refresh_token', (req, res, next) =>{
+
+    // rTken is name of cookie assigned in login resolver
+    const rfrshToken = req.cookies.rTken;
+    if(!rfrshToken){
+        return res.send({ error: true, accessToken: '' })
+    }
+
+    let decodedToken;
+    try{
+        decodedToken = verify(rfrshToken, refreshTokenSignature)
+    } catch(err){
+        return res.send({ error: true, accessToken: '' })
+    }
+
+    const userId = decodedToken.userId;
+    const userType = decodedToken.userType;
+
+    // add logic later to verify if user with userId exists in database
+    // if not, send response where error is true and empty accessToken
+
+    const acsToken = jwt.sign({
+        userId,
+        userType
+    }, accessTokenSignature, {expiresIn: '1h'});
+
+    const rfrshToken = jwt.sign({
+        userId: teacher.id.toString(),
+        userType: teacherSignInType  
+      }, refreshTokenSignature, {expiresIn: '7d'});
+
+      res.cookie(
+          "rTken",
+          rfrshToken,
+          {
+              httpOnly: true
+          }
+      )
+
+    return res.send({ error: false, accessToken: acsToken })
+
+})
 
 app.put('/post-iamge', (req, res, next) =>{
     if(!req.isAuth){
