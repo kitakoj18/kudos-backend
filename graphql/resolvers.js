@@ -184,12 +184,12 @@ module.exports = {
                 throw error;
             }
     
-            const token = jwt.sign({
+            const accessToken = jwt.sign({
                 userId: teacher.id.toString(),
                 userType: teacherSignInType
             }, tokenSignature, {expiresIn: '1h'});
     
-            return {token: token, userId: teacher.id};
+            return {accessToken: accessToken, userId: teacher.id};
         },
         createClass: async function(_, { classInput }, { req }){
     
