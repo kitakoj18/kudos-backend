@@ -9,7 +9,8 @@ const Transaction = require('../models/transaction');
 const Wish = require('../models/wish');
 
 const dotenv = require('dotenv').config();
-const tokenSignature = process.env.JWT_SIGNATURE;
+const accessTokenSignature = process.env.A_JWT_SIGNATURE;
+const refreshTokenSignature = process.env_R_JWT_SIGNATURE;
 const teacherSignInType = process.env.TEACHER_TYPE;
 const studentSignInType = process.env.STUDENT_TYPE;
 
@@ -184,12 +185,17 @@ module.exports = {
                 throw error;
             }
     
-            const accessToken = jwt.sign({
+            const acsToken = jwt.sign({
                 userId: teacher.id.toString(),
                 userType: teacherSignInType
-            }, tokenSignature, {expiresIn: '1h'});
+            }, accessTokenSignature, {expiresIn: '1h'});
+
+            const rfrshToken = jwt.sign({
+              userId: teacher.id.toString(),
+              userType: teacherSignInType  
+            }, refreshTokenSignature, {expiresIn: '7d'});
     
-            return {accessToken: accessToken, userId: teacher.id};
+            return {accessToken: acsToken, userId: teacher.id};
         },
         createClass: async function(_, { classInput }, { req }){
     
