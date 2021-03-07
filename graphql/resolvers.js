@@ -10,7 +10,7 @@ const Wish = require('../models/wish');
 
 const dotenv = require('dotenv').config();
 const accessTokenSignature = process.env.A_JWT_SIGNATURE;
-const refreshTokenSignature = process.env_R_JWT_SIGNATURE;
+const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 const teacherSignInType = process.env.TEACHER_TYPE;
 const studentSignInType = process.env.STUDENT_TYPE;
 
