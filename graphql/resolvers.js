@@ -167,7 +167,7 @@ module.exports = {
     
             return teacher;
         },
-        loginTeacher: async function(_, { teacherInput }, { req }){
+        loginTeacher: async function(_, { teacherInput }, { res }){
     
             const username = teacherInput.username;
             const password = teacherInput.password;
@@ -194,6 +194,14 @@ module.exports = {
               userId: teacher.id.toString(),
               userType: teacherSignInType  
             }, refreshTokenSignature, {expiresIn: '7d'});
+
+            res.cookie(
+                "rTken",
+                rfrshToken,
+                {
+                    httpOnly: true
+                }
+            )
     
             return {accessToken: acsToken, userId: teacher.id};
         },
