@@ -105,14 +105,14 @@ app.post('/refresh_token', (req, res, next) =>{
         userType
     }, accessTokenSignature, {expiresIn: '1h'});
 
-    const rfrshToken = jwt.sign({
+    const newRfrshToken = jwt.sign({
         userId: teacher.id.toString(),
         userType: teacherSignInType  
       }, refreshTokenSignature, {expiresIn: '7d'});
 
       res.cookie(
           "rTken",
-          rfrshToken,
+          newRfrshToken,
           {
               httpOnly: true
           }
