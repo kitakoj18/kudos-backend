@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 const accessTokenSignature = process.env.A_JWT_SIGNATURE;
 const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
+const { createAccessToken, createRefreshToken, sendRefreshToken } = require('./util/tokens');
 
 const sqlize = require('./util/database');
 const Teacher = require('./models/teacher');
@@ -95,25 +96,11 @@ app.post('/refresh_token', (req, res, next) =>{
     // add logic later to verify if user with userId exists in database
     // if not, send response where error is true and empty accessToken
 
-    const acsToken = jwt.sign({
-        userId,
-        userType
-    }, accessTokenSignature, {expiresIn: '1h'});
+    const newAcsToken = createAccessToken(userId, userType);
+    const newRfrshToken = createRefreshToken(userId, userType);
+    sendRefreshToken(res, newRfrshToken)
 
-    const newRfrshToken = jwt.sign({
-        userId,
-        userType  
-      }, refreshTokenSignature, {expiresIn: '7d'});
-
-      res.cookie(
-          "rTken",
-          newRfrshToken,
-          {
-              httpOnly: true
-          }
-      )
-
-    return res.send({ error: false, accessToken: acsToken })
+    return res.send({ error: false, accessToken: newAcsToken })
 
 })
 

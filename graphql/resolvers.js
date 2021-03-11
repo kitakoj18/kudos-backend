@@ -9,10 +9,9 @@ const Transaction = require('../models/transaction');
 const Wish = require('../models/wish');
 
 const dotenv = require('dotenv').config();
-const accessTokenSignature = process.env.A_JWT_SIGNATURE;
-const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 const teacherSignInType = process.env.TEACHER_TYPE;
 const studentSignInType = process.env.STUDENT_TYPE;
+const { createAccessToken, createRefreshToken, sendRefreshToken } = require('../util/tokens');
 
 const Op = require('sequelize').Op;
 
@@ -184,24 +183,11 @@ module.exports = {
                 error.code = 401;
                 throw error;
             }
-    
-            const acsToken = jwt.sign({
-                userId: teacher.id.toString(),
-                userType: teacherSignInType
-            }, accessTokenSignature, {expiresIn: '1h'});
 
-            const rfrshToken = jwt.sign({
-              userId: teacher.id.toString(),
-              userType: teacherSignInType  
-            }, refreshTokenSignature, {expiresIn: '7d'});
+            const acsToken = createAccessToken(teacher.id.toString(), teacherSignInType);
+            const rfrshToken = createRefreshToken(teacher.id.toString(), teacherSignInType);
 
-            res.cookie(
-                "rTken",
-                rfrshToken,
-                {
-                    httpOnly: true
-                }
-            )
+            sendRefreshToken(res, rfrshToken);
     
             return {accessToken: acsToken, userId: teacher.id};
         },
