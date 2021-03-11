@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
+const jwt = require('jsonwebtoken');
 
 const dotenv = require('dotenv').config();
 const accessTokenSignature = process.env.A_JWT_SIGNATURE;
@@ -89,7 +90,7 @@ app.post('/refresh_token', (req, res, next) =>{
 
     let decodedToken;
     try{
-        decodedToken = verify(rfrshToken, refreshTokenSignature)
+        decodedToken = jwt.verify(rfrshToken, refreshTokenSignature)
     } catch(err){
         return res.send({ error: true, accessToken: '' })
     }
@@ -106,8 +107,8 @@ app.post('/refresh_token', (req, res, next) =>{
     }, accessTokenSignature, {expiresIn: '1h'});
 
     const newRfrshToken = jwt.sign({
-        userId: teacher.id.toString(),
-        userType: teacherSignInType  
+        userId,
+        userType  
       }, refreshTokenSignature, {expiresIn: '7d'});
 
       res.cookie(
