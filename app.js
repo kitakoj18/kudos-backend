@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
@@ -34,6 +35,13 @@ const server = new ApolloServer({
 
 const app = express();
 
+app.use(
+    cors({
+        origin: "http://localhost:8000",
+        credentials: true
+    })
+)
+
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) =>{
         cb(null, 'images');
@@ -56,7 +64,6 @@ const fileFilter = (req, file, cb) =>{
 }
 
 app.use(bodyParser.json());
-
 app.use(cookieParser());
 
 app.use(
@@ -64,19 +71,6 @@ app.use(
 );
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-    );
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if(req.method === 'OPTIONS'){
-      return res.sendStatus(200);
-    }
-    next();
-  });
 
 app.use(auth);
 
@@ -139,7 +133,7 @@ app.put('/post-iamge', (req, res, next) =>{
 app.use(helmet());
 app.use(compression());
 
-server.applyMiddleware({ app });
+server.applyMiddleware({ app, cors: false });
 
 // per documentation, good to include both directions of the association
 // so that both models can have magic methods
