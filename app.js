@@ -10,7 +10,6 @@ const compression = require('compression');
 const jwt = require('jsonwebtoken');
 
 const dotenv = require('dotenv').config();
-const accessTokenSignature = process.env.A_JWT_SIGNATURE;
 const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 const { createAccessToken, createRefreshToken, sendRefreshToken } = require('./util/tokens');
 
