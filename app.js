@@ -35,12 +35,29 @@ const server = new ApolloServer({
 
 const app = express();
 
-app.use(
-    cors({
-        origin: "http://localhost:8000",
-        credentials: true
-    })
-)
+const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000']
+const whitelistIp = ['104.32.92.60']
+const corsOptionsDelegate = function(req, cb){
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+    let corsOptions;
+    if(whitelist.indexOf(req.header('Origin')) !== -1 || whitelistIp.indexOf(ip) !== -1){
+        corsOptions = { origin: true, credentials: true }
+    } else{
+        corsOptions = { origin: false, credentials: false }
+    }
+
+    cb(null, corsOptions)
+}
+
+app.use(cors(corsOptionsDelegate))
+
+// app.use(
+//     cors({
+//         origin: "http://localhost:8000",
+//         credentials: true
+//     })
+// )
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) =>{
