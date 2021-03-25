@@ -52,8 +52,8 @@ const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000']
 
 const corsOptionsDelegate = function(req, cb){
     let corsOptions;
+    console.log(req.header('Origin'))
     if(whitelist.indexOf(req.header('Origin')) !== -1){
-        console.log(req.header('Origin'))
         corsOptions = { origin: true, credentials: true }
     } else{
         corsOptions = { origin: false, credentials: false}
