@@ -23,7 +23,8 @@ exports.sendRefreshToken = ( res, refreshToken ) =>{
         "rTken",
         refreshToken,
         {
-            httpOnly: true
+            httpOnly: true,
+            path: '/refresh_token'
         }
     )
 }
