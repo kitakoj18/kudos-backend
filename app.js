@@ -36,17 +36,28 @@ const server = new ApolloServer({
 const app = express();
 
 const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000']
-const whitelistIp = ['104.32.92.60']
-const corsOptionsDelegate = function(req, cb){
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+// const whitelistIp = ['104.32.92.60']
+// const corsOptionsDelegate = function(req, cb){
+//     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
+//     let corsOptions;
+//     if(whitelist.indexOf(req.header('Origin')) !== -1 || whitelistIp.indexOf(ip) !== -1){
+//         corsOptions = { origin: true, credentials: true }
+//     } else{
+//         corsOptions = { origin: false, credentials: false }
+//     }
+
+//     cb(null, corsOptions)
+// }
+
+const corsOptionsDelegate = function(req, cb){
     let corsOptions;
-    if(whitelist.indexOf(req.header('Origin')) !== -1 || whitelistIp.indexOf(ip) !== -1){
+    if(whitelist.indexOf(req.header('Origin')) !== -1){
+        console.log(req.header('Origin'))
         corsOptions = { origin: true, credentials: true }
     } else{
-        corsOptions = { origin: false, credentials: false }
+        corsOptions = { origin: false, credentials: false}
     }
-
     cb(null, corsOptions)
 }
 
