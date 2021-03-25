@@ -54,6 +54,7 @@ const corsOptionsDelegate = function(req, cb){
     let corsOptions;
     console.log(req.header('Origin'))
     if(whitelist.indexOf(req.header('Origin')) !== -1){
+        console.log("made it into whitelist")
         corsOptions = { origin: true, credentials: true }
     } else{
         corsOptions = { origin: false, credentials: false}
