@@ -24,6 +24,8 @@ exports.sendRefreshToken = ( res, refreshToken ) =>{
         refreshToken,
         {
             httpOnly: true,
+            sameSite: 'None',
+            secure: true,
             path: '/refresh_token'
         }
     )
