@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
 
     type Student {
-        studentId: Int!
+        id: Int!
         firstName: String!
         lastName: String!
         username: String!
@@ -17,7 +17,7 @@ const typeDefs = gql`
     }
 
     type Prize {
-        prizeId: Int!
+        id: Int!
         name: String!
         imageUrl: String!
         description: String
@@ -43,7 +43,7 @@ const typeDefs = gql`
     }
 
     type Class {
-        classId: Int!
+        id: Int!
         className: String!
         imageUrl: String
         teacherId: Int!
@@ -53,7 +53,7 @@ const typeDefs = gql`
     }
 
     type Teacher {
-        teacherId: Int!
+        id: Int!
         firstName: String!
         lastName: String!
         username: String!
