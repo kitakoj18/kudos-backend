@@ -106,22 +106,12 @@ module.exports = {
                 where: {
                    id: studentId 
                 },
-                attributes: {
-                    include: [['id', 'studentId']],
-                    exclude: ['id', 'createdAt', 'updatedAt']
-                },
                 include: [
                     {
-                        model: Transaction,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
+                        model: Transaction
                     },
                     {
-                        model: Wish,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
+                        model: Wish
                     }
                 ]
             });
