@@ -80,6 +80,61 @@ module.exports = {
     
             return teacher.toJSON();
         },
+        getClassInfo: async function(_, { classId }, { req }){
+
+            if(!req.isAuth){
+                const error = new Error('Not authenticated!');
+                error.code = 401;
+                throw error;
+            }
+
+            if(req.userType !== this.teacherSignInType){
+                const error = new Error('Sorry, you must be a student to access this page');
+                error.code = 401;
+                throw error;
+            }
+
+            const cls = await Class.findOne({
+                where: {
+                   id: classId
+                },
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                // nested eager loading
+                include: [
+                    {model: Class,
+                        attributes: {
+                            include: [['id', 'classId']],
+                            exclude: ['id', 'createdAt', 'updatedAt']
+                        },
+                        include: [
+                            {model: Student,
+                                attributes: {
+                                    include: [['id', 'studentId']],
+                                    exclude: ['id', 'createdAt', 'updatedAt']
+                                },
+                                include: [
+                                    {model: Transaction,
+                                        attributes: {
+                                            exclude: ['createdAt', 'updatedAt']
+                                        }
+                                    }
+                                ]
+                            },
+                            {model: Prize,
+                                attributes: {
+                                    include: [['id', 'prizeId']],
+                                    exclude: ['id', 'createdAt', 'updatedAt']
+                                }
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            
+        },
         student: async function(_, __, { req }){
     
             if(!req.isAuth){
