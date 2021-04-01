@@ -58,8 +58,8 @@ module.exports = {
                 throw error;
             }
 
-            if(req.userType !== this.teacherSignInType){
-                const error = new Error('Sorry, you must be a student to access this page');
+            if(req.userType !== teacherSignInType){
+                const error = new Error('Sorry, you must be a teacher to access this page');
                 error.code = 401;
                 throw error;
             }
@@ -79,7 +79,13 @@ module.exports = {
                 ]
             });
 
-            
+            if(!cls){
+                const error = new Error(`Something went wrong No class with id ${classId} can be found`);
+                error.code = 401;
+                throw error;
+            }
+
+            return cls.toJSON()
         },
         student: async function(_, __, { req }){
     
