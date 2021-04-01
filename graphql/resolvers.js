@@ -36,39 +36,9 @@ module.exports = {
                 where: {
                    id: teacherId 
                 },
-                attributes: {
-                    include: [['id', 'teacherId']],
-                    exclude: ['id', 'createdAt', 'updatedAt']
-                },
                 // nested eager loading
                 include: [
-                    {model: Class,
-                        attributes: {
-                            include: [['id', 'classId']],
-                            exclude: ['id', 'createdAt', 'updatedAt']
-                        },
-                        include: [
-                            {model: Student,
-                                attributes: {
-                                    include: [['id', 'studentId']],
-                                    exclude: ['id', 'createdAt', 'updatedAt']
-                                },
-                                include: [
-                                    {model: Transaction,
-                                        attributes: {
-                                            exclude: ['createdAt', 'updatedAt']
-                                        }
-                                    }
-                                ]
-                            },
-                            {model: Prize,
-                                attributes: {
-                                    include: [['id', 'prizeId']],
-                                    exclude: ['id', 'createdAt', 'updatedAt']
-                                }
-                            }
-                        ]
-                    }
+                    {model: Class}
                 ]
             });
     
@@ -98,38 +68,14 @@ module.exports = {
                 where: {
                    id: classId
                 },
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
-                },
                 // nested eager loading
                 include: [
-                    {model: Class,
-                        attributes: {
-                            include: [['id', 'classId']],
-                            exclude: ['id', 'createdAt', 'updatedAt']
-                        },
+                    {model: Student,
                         include: [
-                            {model: Student,
-                                attributes: {
-                                    include: [['id', 'studentId']],
-                                    exclude: ['id', 'createdAt', 'updatedAt']
-                                },
-                                include: [
-                                    {model: Transaction,
-                                        attributes: {
-                                            exclude: ['createdAt', 'updatedAt']
-                                        }
-                                    }
-                                ]
-                            },
-                            {model: Prize,
-                                attributes: {
-                                    include: [['id', 'prizeId']],
-                                    exclude: ['id', 'createdAt', 'updatedAt']
-                                }
-                            }
+                            {model: Transaction}
                         ]
-                    }
+                    },
+                    {model: Prize}
                 ]
             });
 
