@@ -25,11 +25,16 @@ const Transaction = sequelize.define('transaction', {
   prizeCost: {
     type: Sequelize.INTEGER,
     allowNull: false
+  },
+  studentId: {
+    type: Sequelize.INTEGER
+  },
+  prizeId: {
+    type: Sequelize.INTEGER
+  },
+  classId: {
+    type: Sequelize.INTEGER
   }
-  // prizeId: {
-  //   type: Sequelize.INTEGER,
-  //   allowNull: false
-  // }
 });
 
 module.exports = Transaction;

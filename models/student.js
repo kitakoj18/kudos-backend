@@ -32,6 +32,9 @@ const Student = sequelize.define('student', {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    classId: {
+        type: Sequelize.INTEGER
     }
 });
 
