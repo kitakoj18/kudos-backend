@@ -1,16 +1,13 @@
 'use strict';
 
 module.exports = {
-  up(queryInterface, Sequelize){
-    queryInterface.addColumn('Transaction')
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.addColumn('transactions', 'classId', {
+      type: Sequelize.INTEGER
+    })
   },
 
-  down(queryInterface, Sequelize){
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.removeColumn('transactions', 'classId')
   }
 };
