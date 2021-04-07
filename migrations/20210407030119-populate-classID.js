@@ -1,13 +1,26 @@
 'use strict';
 
+const Student = require('../models/student');
+const Transaction = require('../models/transaction');
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
+    const t = await queryInterface.sequelize.transaction()
+    try {
+      const transactions = await Transaction.findAll()
+      for await (const transaction of transactions){
+        const studentId = await transaction.studentId
+        const student = await Student.findByPk(studentId)
+
+        await transaction.update({ classId: student.classId })
+      }
+
+      await t.commit()
+      
+    } catch(err){
+      await t.rollback()
+      console.log("something went wrong; transaction classId did not populate")
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
