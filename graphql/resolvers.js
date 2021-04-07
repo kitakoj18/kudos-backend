@@ -465,7 +465,9 @@ module.exports = {
                 prizeId: transactionInput.prizeId, 
                 prizeName: prize.name, 
                 prizeImageUrl: prize.imageUrl, 
-                prizeCost: prize.kudosCost });
+                prizeCost: prize.kudosCost,
+                classId: student.classId
+            });
             // deduct prize cost from student balance
             student.kudosBalance -= prize.kudosCost;
             await student.save();

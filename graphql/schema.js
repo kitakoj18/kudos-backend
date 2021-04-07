@@ -35,6 +35,7 @@ const typeDefs = gql`
         prizeImageUrl: String!
         prizeCost: Int!
         studentId: Int!
+        classId: Int!
     }
 
     type Wish {
