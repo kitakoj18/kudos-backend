@@ -87,6 +87,34 @@ module.exports = {
 
             return cls.toJSON()
         },
+        getClassTransactions: async function(_, { classId }, { req }){
+
+            if(!req.isAuth){
+                const error = new Error('Not authenticated!');
+                error.code = 401;
+                throw error;
+            }
+
+            if(req.userType !== teacherSignInType){
+                const error = new Error('Sorry, you must be a teacher to access this page');
+                error.code = 401;
+                throw error;
+            }
+
+            const transactions = await Transaction.findAll({
+                where: {
+                    classId: classId
+                }
+            })
+
+            let classTransactions = []
+            transactions.forEach(transaction =>{
+                classTransactions.push(transaction.toJSON())
+            })
+
+            return classTransactions
+
+        },
         student: async function(_, __, { req }){
     
             if(!req.isAuth){

@@ -122,6 +122,7 @@ const typeDefs = gql`
     type Query {
         teacher: Teacher!
         getClassInfo(classId: Int!): Class!
+        getClassTransactions(classId: Int!): [Transaction]!
         student: Student!
     }
 
