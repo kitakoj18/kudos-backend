@@ -12,24 +12,18 @@ const dotenv = require('dotenv').config();
 const teacherSignInType = process.env.TEACHER_TYPE;
 const studentSignInType = process.env.STUDENT_TYPE;
 const { createAccessToken, createRefreshToken, sendRefreshToken } = require('../util/tokens');
+const { checkAuth } = require('../util/errors');
 
 const Op = require('sequelize').Op;
+
+let TEACHER_STR = 'teacher'
+let STUDENT_STR = 'student'
 
 module.exports = {
     Query: {
         teacher: async function(_, __, { req }){
 
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to access this page!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const teacherId = req.userId;
             const teacher = await Teacher.findOne({
@@ -52,17 +46,7 @@ module.exports = {
         },
         getClassInfo: async function(_, { classId }, { req }){
 
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to access this page');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
 
             const cls = await Class.findOne({
                 where: {
@@ -89,17 +73,7 @@ module.exports = {
         },
         getClassTransactions: async function(_, { classId }, { req }){
 
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to access this page');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
 
             const transactions = await Transaction.findAll({
                 where: {
