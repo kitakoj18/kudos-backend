@@ -91,17 +91,7 @@ module.exports = {
         },
         student: async function(_, __, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== studentSignInType){
-                const error = new Error('Sorry, you must be a student to access this page!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, studentSignInType, STUDENT_STR)
     
             const studentId = req.userId;
             const student = await Student.findOne({
@@ -192,34 +182,14 @@ module.exports = {
         },
         createClass: async function(_, { classInput }, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to create a new class!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const teacher = await Teacher.findByPk(req.userId);
             teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
         },
         createStudent: async function(_, { studentInput }, { req }) {
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to create a new student!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(studentInput.classId);
             if(!cls){
@@ -247,33 +217,13 @@ module.exports = {
         },
         deleteStudents: async function(_, { studentInput }, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to create a new prize!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             Student.destroy({ where: { id: studentInput.studentIds } })
         },
         createPrize: async function(_, { prizeInput }, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to create a new prize!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(prizeInput.classId);
             if(!cls){
@@ -293,17 +243,7 @@ module.exports = {
         },
         editPrize: async function(_, { prizeInput }, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to create a new prize!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const prize = await Prize.findByPk(prizeInput.prizeId);
             if(!prize){
@@ -322,11 +262,7 @@ module.exports = {
         },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to perform this action!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const student = await Student.findByPk(adjustedBalanceData.studentId);
             if(!student){
@@ -342,11 +278,7 @@ module.exports = {
         },
         toggleTreasureBox: async function(_, { classId }, { req }){
     
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to perform this action!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(classId);
             if(!cls){
@@ -361,11 +293,7 @@ module.exports = {
         },
         approveTransaction: async function(_, { approveInput }, { req }){
     
-            if(req.userType !== teacherSignInType){
-                const error = new Error('Sorry, you must be a teacher to perform this action!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const transaction = await Transaction.findByPk(approveInput.transactionId);
     
@@ -419,17 +347,7 @@ module.exports = {
         },
         postTransaction: async function(_, { transactionInput }, { req }){
     
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            // if(req.userType !== studentSignInType){
-            //     const error = new Error('Sorry, you must be a student to access this page!');
-            //     error.code = 401;
-            //     throw error;
-            // }
+            checkAuth(req, studentSignInType, STUDENT_STR)
     
             const student = await Student.findByPk(req.userId);
             if(!student){
@@ -501,17 +419,7 @@ module.exports = {
         },
         addToWishlist: async function(_, { wishlistInput }, { req }){
             
-            if(!req.isAuth){
-                const error = new Error('Not authenticated!');
-                error.code = 401;
-                throw error;
-            }
-    
-            if(req.userType !== studentSignInType){
-                const error = new Error('Sorry, you must be a student to access this page!');
-                error.code = 401;
-                throw error;
-            }
+            checkAuth(req, studentSignInType, STUDENT_STR)
     
             const student = await Student.findByPk(req.userId);
             if(!student){
