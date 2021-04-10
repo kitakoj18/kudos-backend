@@ -49,8 +49,8 @@ const typeDefs = gql`
         imageUrl: String
         teacherId: Int!
         treasureBoxOpen: Boolean!
-        students: [Student!]!
-        prizes: [Prize!]!
+        students: [Student!]
+        prizes: [Prize!]
     }
 
     type Teacher {
