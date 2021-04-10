@@ -11,3 +11,12 @@ exports.checkAuth = (req, userTypeSign, userType) =>{
         throw error;
     }
 }
+
+exports.checkObj = (obj, type, id) =>{
+    if(!obj){
+        const error = new Error(`Something went wrong No ${type} with id ${id} can be found`);
+        error.code = 401;
+        throw error;
+    }
+    
+}

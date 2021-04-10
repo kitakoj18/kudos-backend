@@ -12,12 +12,14 @@ const dotenv = require('dotenv').config();
 const teacherSignInType = process.env.TEACHER_TYPE;
 const studentSignInType = process.env.STUDENT_TYPE;
 const { createAccessToken, createRefreshToken, sendRefreshToken } = require('../util/tokens');
-const { checkAuth } = require('../util/errors');
+const { checkAuth, checkObj } = require('../util/errors');
 
 const Op = require('sequelize').Op;
 
 let TEACHER_STR = 'teacher'
+let CLASS_STR = 'class'
 let STUDENT_STR = 'student'
+let PRIZE_STR = 'prize'
 
 module.exports = {
     Query: {
@@ -35,12 +37,8 @@ module.exports = {
                     {model: Class}
                 ]
             });
-    
-            if(!teacher){
-                const error = new Error(`Something went wrong No teacher with id ${teacherId} can be found`);
-                error.code = 401;
-                throw error;
-            }
+
+            checkObj(teacher, TEACHER_STR, teacherId)
     
             return teacher.toJSON();
         },
@@ -63,11 +61,7 @@ module.exports = {
                 ]
             });
 
-            if(!cls){
-                const error = new Error(`Something went wrong No class with id ${classId} can be found`);
-                error.code = 401;
-                throw error;
-            }
+            checkObj(cls, CLASS_STR, classId)
 
             return cls.toJSON()
         },
@@ -107,12 +101,8 @@ module.exports = {
                     }
                 ]
             });
-    
-            if(!student){
-                const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
-                error.code = 401;
-                throw error;
-            }
+
+            checkObj(student, STUDENT_STR, studentId)
     
             return student.toJSON();
         }
@@ -192,11 +182,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(studentInput.classId);
-            if(!cls){
-                const error = new Error(`Something went wrong! The class with id ${studentInput.classId} cannot be found!`);
-                error.code = 400;
-                throw error;
-            }
+            checkObj(cls, CLASS_STR, studentInput.classId)
     
             const student = await Student.findOne({where: {
                 username: studentInput.username 
@@ -226,11 +212,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(prizeInput.classId);
-            if(!cls){
-                const error = new Error(`Something went wrong! The class with id ${prizeInput.classId} cannot be found!`);
-                error.code = 400;
-                throw error;
-            }
+            checkObj(cls, CLASS_STR, prizeInput.classId)
     
             cls.createPrize({
                 name: prizeInput.name,
@@ -246,11 +228,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const prize = await Prize.findByPk(prizeInput.prizeId);
-            if(!prize){
-                const error = new Error(`Something went wrong! The prize with id ${prizeInput.prizeId} cannot be found!`);;
-                error.code = 404;
-                throw error;
-            }
+            checkObj(prize, PRIZE_STR, prizeInput.prizeId)
     
             prize.name = prizeInput.name;
             prize.imageUrl = prizeInput.imageUrl;
@@ -265,11 +243,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const student = await Student.findByPk(adjustedBalanceData.studentId);
-            if(!student){
-                const error = new Error(`Something went wrong! The student with id ${adjustedBalanceData.studentId} cannot be found!`);
-                error.code = 400;
-                throw error;
-            }
+            checkObj(student, STUDENT_STR, adjustedBalanceData.studentId)
     
             student.balance = adjustedBalanceData.newBalance;
             await student.save();
@@ -281,11 +255,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const cls = await Class.findByPk(classId);
-            if(!cls){
-                const error = new Error(`Something went wrong! The class with id ${classId} cannot be found!`);
-                error.code = 400;
-                throw error;
-            }
+            checkObj(cls, CLASS_STR, classId)
     
             cls.treasureBoxOpen = !cls.treasureBoxOpen;
             cls.save();
@@ -350,19 +320,11 @@ module.exports = {
             checkAuth(req, studentSignInType, STUDENT_STR)
     
             const student = await Student.findByPk(req.userId);
-            if(!student){
-                const error = new Error(`Something went wrong! No student with id ${studentId} can be found`);
-                error.code = 404;
-                throw error;
-            }
+            checkObj(student, STUDENT_STR, req.userId)
     
             // get student class and check if treasurebox is open before moving forward with transaction
             const studentClass = await Class.findByPk(student.classId);
-            if(!studentClass){
-                const error = new Error(`Something went wrong! No class with id ${student.classId} can be found`);
-                error.code = 404;
-                throw error;
-            }
+            checkObj(studentClass, CLASS_STR, student.classId)
     
             if(!studentClass.treasureBoxOpen){
                 const error = new Error('The treasure box for your class is currently not open!');
@@ -422,11 +384,8 @@ module.exports = {
             checkAuth(req, studentSignInType, STUDENT_STR)
     
             const student = await Student.findByPk(req.userId);
-            if(!student){
-                const error = new Error(`Something went wrong No student with id ${studentId} can be found`);
-                error.code = 404;
-                throw error;
-            }
+            checkObj(student, STUDENT_STR, req.userId)
+            
             student.createWish({ prizeId: wishlistInput.prizeId })
         }
     }
