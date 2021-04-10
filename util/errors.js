@@ -6,7 +6,7 @@ exports.checkAuth = (req, userTypeSign, userType) =>{
     }
 
     if(req.userType !== userTypeSign){
-        const error = new Error(`Sorry, you must be a ${userType} to access this page!`);
+        const error = new Error(`Sorry, you must be a ${userType} to access this page or do this action!`);
         error.code = 401;
         throw error;
     }
