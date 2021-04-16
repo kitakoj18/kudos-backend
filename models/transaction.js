@@ -31,9 +31,6 @@ const Transaction = sequelize.define('transaction', {
   },
   prizeId: {
     type: Sequelize.INTEGER
-  },
-  classId: {
-    type: Sequelize.INTEGER
   }
 });
 
