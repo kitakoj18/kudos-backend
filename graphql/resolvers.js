@@ -65,24 +65,6 @@ module.exports = {
 
             return cls.toJSON()
         },
-        getClassTransactions: async function(_, { classId }, { req }){
-
-            checkAuth(req, teacherSignInType, TEACHER_STR)
-
-            const transactions = await Transaction.findAll({
-                where: {
-                    classId: classId
-                }
-            })
-
-            let classTransactions = []
-            transactions.forEach(transaction =>{
-                classTransactions.push(transaction.toJSON())
-            })
-
-            return classTransactions
-
-        },
         student: async function(_, __, { req }){
     
             checkAuth(req, studentSignInType, STUDENT_STR)
