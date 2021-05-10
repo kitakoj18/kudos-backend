@@ -183,6 +183,22 @@ module.exports = {
                 password: hashedPw
             });
         },
+        editStudent: async function(_, { studentInput }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const student = await Student.findOne({where: {
+                id: studentInput.id
+            }})
+            checkObj(student, STUDENT_STR, studentInput.id)
+
+            student.firstName = studentInput.firstName
+            student.lastName = studentInput.lastName
+            student.username = studentInput.username
+            student.password = studentInput.password
+            await student.save();
+            
+        },
         deleteStudents: async function(_, { studentInput }, { req }){
     
             checkAuth(req, teacherSignInType, TEACHER_STR)

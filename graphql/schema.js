@@ -82,6 +82,7 @@ const typeDefs = gql`
     }
 
     input StudentInputData {
+        id: Int
         firstName: String
         lastName: String
         username: String!
@@ -130,6 +131,7 @@ const typeDefs = gql`
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
+        editStudent(studentInput: StudentInputData): Student
         deleteStudents(studentInput: DeleteStudentsData): Student
         createPrize(prizeInput: PrizeInputData): Prize
         editPrize(prizeInput: PrizeInputData): Prize
