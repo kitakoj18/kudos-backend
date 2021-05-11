@@ -38,9 +38,8 @@ const app = express();
 const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000']
 const corsOptionsDelegate = function(req, cb){
     let corsOptions;
-    console.log(req.header('Origin'))
+    // console.log(req.header('Origin'))
     if(whitelist.indexOf(req.header('Origin')) !== -1){
-        console.log("made it into whitelist")
         corsOptions = { origin: true, credentials: true }
     } else{
         corsOptions = { origin: false, credentials: false}
@@ -111,7 +110,7 @@ app.post('/refresh_token', (req, res, next) =>{
 
 })
 
-app.put('/post-iamge', (req, res, next) =>{
+app.put('/post-image', (req, res, next) =>{
     if(!req.isAuth){
         throw new Error('Not Authenticated!')
     }
