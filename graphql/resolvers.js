@@ -195,7 +195,9 @@ module.exports = {
             student.firstName = studentInput.firstName
             student.lastName = studentInput.lastName
             student.username = studentInput.username
-            student.password = studentInput.password
+
+            const hashedPw = await bcrypt.hash(studentInput.password, 12);
+            student.password = hashedPw
             await student.save();
             
         },
