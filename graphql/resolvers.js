@@ -245,7 +245,7 @@ module.exports = {
             const student = await Student.findByPk(adjustedBalanceData.studentId);
             checkObj(student, STUDENT_STR, adjustedBalanceData.studentId)
     
-            student.balance = adjustedBalanceData.newBalance;
+            student.kudosBalance = adjustedBalanceData.newBalance;
             await student.save();
             return student;
     
