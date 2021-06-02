@@ -180,6 +180,7 @@ module.exports = {
                 firstName: studentInput.firstName,
                 lastName: studentInput.lastName,
                 username: studentInput.username,
+                imageUrl: studentInput.imageUrl,
                 password: hashedPw
             });
         },

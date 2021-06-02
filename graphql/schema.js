@@ -87,6 +87,7 @@ const typeDefs = gql`
         lastName: String
         username: String!
         password: String!
+        imageUrl: String
         classId: Int
     }
 
