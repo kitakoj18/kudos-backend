@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const aws = require('aws-sdk');
 
 const Teacher = require('../models/teacher');
 const Class = require('../models/class');
@@ -20,6 +21,8 @@ let TEACHER_STR = 'teacher'
 let CLASS_STR = 'class'
 let STUDENT_STR = 'student'
 let PRIZE_STR = 'prize'
+
+const s3Bucket = process.env.AWS_S3BUCKET;
 
 module.exports = {
     Query: {
@@ -357,28 +360,7 @@ module.exports = {
     
             prize.quantity -= 1
             await prize.save();
-    
-            // get this transaction, which is the last transaction made by student to return for mutation
-            // const transactions = await student.getTransactions();
-            // const lastTransactionId = transactions[transactions.length - 1].toJSON().id;
-            // const lastTransaction = await Transaction.findOne({
-            //     where: {
-            //         id: lastTransactionId
-            //     },
-            //     attributes: {
-            //         exclude: ['createdAt', 'updatedAt']
-            //     },
-            //     include: [
-            //         {model: Prize,
-            //             attributes: {
-            //                 exclude: ['id', 'createdAt', 'updatedAt']
-            //             }
-            //         }
-            //     ]
-            // });
-    
-            //console.log(lastTransaction.toJSON());
-            //return lastTransaction.toJSON();
+
         },
         addToWishlist: async function(_, { wishlistInput }, { req }){
             
@@ -388,6 +370,27 @@ module.exports = {
             checkObj(student, STUDENT_STR, req.userId)
             
             student.createWish({ prizeId: wishlistInput.prizeId })
+        },
+        signS3: async function(_, { fileName, fileType }, { req }){
+            
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const s3 = new aws.S3({
+                signatureVersion: 'v4',
+                region: 'us-west-1'
+            })
+
+            const s3Params = {
+                Bucket: s3Bucket,
+                Key: fileName,
+                Expires: 60,
+                ContentType: fileType,
+                ACL: 'public-read'
+            }
+
+            const signedRequest = await s3.getSignedUrl('putObject', s3Params)
+            const url = `https://${s3Bucket}.s3.amazonaws.com/${fileName}`
+            return { signedRequest, url }
         }
     }
 };

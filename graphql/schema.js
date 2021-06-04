@@ -68,6 +68,11 @@ const typeDefs = gql`
         userId: Int!
     }
 
+    type S3Payload {
+        signedRequest: String!
+        url: String!
+    }
+
     input TeacherInputData {
         firstName: String
         lastName: String
@@ -141,6 +146,7 @@ const typeDefs = gql`
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
         postTransaction(transactionInput: PrizeTransactionInputData): Transaction
         addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
+        signS3(fileName: String!, fileType: String!): S3Payload!
     }
 `;
 
