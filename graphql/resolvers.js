@@ -48,6 +48,7 @@ module.exports = {
         getClassInfo: async function(_, { classId }, { req }){
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
+            console.log('class info!!')
 
             const cls = await Class.findOne({
                 where: {
@@ -390,6 +391,7 @@ module.exports = {
 
             const signedRequest = await s3.getSignedUrl('putObject', s3Params)
             const url = `https://${s3Bucket}.s3.amazonaws.com/${fileName}`
+
             return { signedRequest, url }
         }
     }
