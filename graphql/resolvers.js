@@ -312,13 +312,15 @@ module.exports = {
                 error.code = 401;
                 throw error;
             }
+
+            const studentClassId = student.classId
+
+            const acsToken = createAccessToken(student.id.toString(), studentSignInType, studentClassId);
+            const rfrshToken = createRefreshToken(student.id.toString(), studentSignInType);
+
+            sendRefreshToken(res, rfrshToken);
     
-            const token = jwt.sign({
-                userId: student.id.toString(),
-                userType: studentSignInType
-            }, tokenSignature, {expiresIn: '1h'});
-    
-            return {token: token, userId: student.id};
+            return {accessToken: acsToken, userId: student.id};
         },
         postTransaction: async function(_, { transactionInput }, { req }){
     
