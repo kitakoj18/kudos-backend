@@ -91,6 +91,19 @@ module.exports = {
             checkObj(student, STUDENT_STR, studentId)
     
             return student.toJSON();
+        },
+        getClassPrizes: async function(_, __, { req }){
+
+            checkAuth(req, studentSignInType, STUDENT_STR)
+
+            const studentClassId = req.classId
+            const classPrizes = await Prize.findOne({
+                where: {
+                    classId: studentClassId
+                }
+            })
+
+            return classPrizes.toJSON();
         }
     },
     Mutation: {

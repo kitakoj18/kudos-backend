@@ -129,6 +129,7 @@ const typeDefs = gql`
         teacher: Teacher!
         getClassInfo(classId: Int!): Class!
         student: Student!
+        getClassPrizes: [Prize]!
     }
 
     type Mutation {
