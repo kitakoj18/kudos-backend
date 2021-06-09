@@ -26,6 +26,7 @@ const Student = sequelize.define('student', {
         allowNull: false
     },
     imageUrl: Sequelize.STRING,
+    imgFileName: Sequelize.STRING,
     biography: Sequelize.TEXT,
     favoriteSubject: Sequelize.STRING,
     kudosBalance: {
