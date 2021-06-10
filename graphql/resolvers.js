@@ -173,6 +173,7 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
     
             const teacher = await Teacher.findByPk(req.userId);
+            checkObj(teacher, TEACHER_STR, req.userId)
             teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
         },
         createStudent: async function(_, { studentInput }, { req }) {
