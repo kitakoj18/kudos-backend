@@ -256,6 +256,12 @@ module.exports = {
             prize.quantity = prizeInput.quantity;
             await prize.save();
         },
+        deletePrizes: async function(_, { prizeInput }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            Prize.destroy({ where: { id: prizeInput.prizeIds } })
+        },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     
             checkAuth(req, teacherSignInType, TEACHER_STR)

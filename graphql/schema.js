@@ -111,6 +111,10 @@ const typeDefs = gql`
         prizeId: Int
     }
 
+    input DeletePrizesData {
+        prizeIds: [Int!]!
+    }
+
     input AdjustedBalance {
         studentId: Int!
         newBalance: Int!
@@ -142,6 +146,7 @@ const typeDefs = gql`
         deleteStudents(studentInput: DeleteStudentsData): Student
         createPrize(prizeInput: PrizeInputData): Prize
         editPrize(prizeInput: PrizeInputData): Prize
+        deletePrizes(prizeInput: DeletePrizesData): Prize
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
