@@ -11,7 +11,6 @@ const jwt = require('jsonwebtoken');
 
 const dotenv = require('dotenv').config();
 const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
-const studentSignInType = process.env.STUDENT_TYPE;
 const { createAccessToken, createRefreshToken, sendRefreshToken } = require('./util/tokens');
 
 const sqlize = require('./util/database');
@@ -21,6 +20,7 @@ const Student = require('./models/student');
 const Prize = require('./models/prize');
 const Transaction = require('./models/transaction');
 const Wish = require('./models/wish');
+const Category = require('./models/category');
 
 const auth = require('./middleware/auth');
 
@@ -148,6 +148,9 @@ Transaction.belongsTo(Prize);
 Student.hasMany(Wish);
 Wish.belongsTo(Student);
 Wish.belongsTo(Prize);
+
+Teacher.hasMany(Category);
+Category.belongsTo(Teacher);
 
 sqlize
     .sync()
