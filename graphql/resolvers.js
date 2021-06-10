@@ -48,7 +48,6 @@ module.exports = {
         getClassInfo: async function(_, { classId }, { req }){
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
-            console.log('class info!!')
 
             const cls = await Class.findOne({
                 where: {
@@ -261,6 +260,14 @@ module.exports = {
             checkAuth(req, teacherSignInType, TEACHER_STR)
 
             Prize.destroy({ where: { id: prizeInput.prizeIds } })
+        },
+        createCategory: async function(_, { categoryName }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const teacher = await Teacher.findByPk(req.userId);
+            checkObj(teacher, TEACHER_STR, req.userId);
+            teacher.createCategory({ category: categoryName });
         },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     

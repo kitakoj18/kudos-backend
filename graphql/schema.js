@@ -63,6 +63,11 @@ const typeDefs = gql`
         classes: [Class!]
     }
 
+    type Category {
+        id: Int!
+        category: String!
+    }
+
     type AuthData {
         accessToken: String!
         userId: Int!
@@ -147,6 +152,7 @@ const typeDefs = gql`
         createPrize(prizeInput: PrizeInputData): Prize
         editPrize(prizeInput: PrizeInputData): Prize
         deletePrizes(prizeInput: DeletePrizesData): Prize
+        createCategory(categoryName: String!): Category
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
