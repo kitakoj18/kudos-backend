@@ -178,31 +178,6 @@ module.exports = {
     
             return teacher;
         },
-        loginTeacher: async function(_, { teacherInput }, { res }){
-    
-            const username = teacherInput.username;
-            const password = teacherInput.password;
-            const teacher = await Teacher.findOne({where: {username: username}});
-            if(!teacher) {
-                const error = new Error('Teacher with this username does not exist');
-                error.code = 401;
-                throw error;
-            }
-    
-            const validPassword = await bcrypt.compare(password, teacher.password);
-            if(!validPassword) {
-                const error = new Error('Incorrect password. Please try again.');
-                error.code = 401;
-                throw error;
-            }
-
-            const acsToken = createAccessToken(teacher.id.toString(), teacherSignInType);
-            const rfrshToken = createRefreshToken(teacher.id.toString(), teacherSignInType);
-
-            sendRefreshToken(res, rfrshToken);
-    
-            return {accessToken: acsToken, userId: teacher.id};
-        },
         createClass: async function(_, { classInput }, { req }){
     
             checkAuth(req, teacherSignInType, TEACHER_STR)
@@ -355,34 +330,6 @@ module.exports = {
             await prize.save();
     
             return transaction;
-        },
-        loginStudent: async function(_, { studentInput }){
-    
-            const username = studentInput.username;
-            const password = studentInput.password;
-            const student = Student.findOne({where: {username: username}});
-    
-            if(!student){
-                const error = new Error('Student with this username does not exist!');
-                error.code = 400;
-                throw error;
-            }
-    
-            const validPassword = await bcrypt.compare(password, student.password);
-            if(!validPassword) {
-                const error = new Error('Incorrect password. Please try again.');
-                error.code = 401;
-                throw error;
-            }
-
-            const studentClassId = student.classId
-
-            const acsToken = createAccessToken(student.id.toString(), studentSignInType, studentClassId);
-            const rfrshToken = createRefreshToken(student.id.toString(), studentSignInType);
-
-            sendRefreshToken(res, rfrshToken);
-    
-            return {accessToken: acsToken, userId: student.id};
         },
         postTransaction: async function(_, { transactionInput }, { req }){
     
