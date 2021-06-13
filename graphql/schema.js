@@ -78,6 +78,12 @@ const typeDefs = gql`
         url: String!
     }
 
+    input UserLoginData {
+        username: String!
+        password: String!
+        userType: String!
+    }
+
     input TeacherInputData {
         firstName: String
         lastName: String
@@ -142,8 +148,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        loginTeacher(teacherInput: TeacherInputData): AuthData!
-        loginStudent(studentInput: StudentInputData): AuthData!
+        loginUser(userInput: UserLoginData): AuthData!
         createTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student

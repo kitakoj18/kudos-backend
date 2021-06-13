@@ -106,6 +106,41 @@ module.exports = {
         }
     },
     Mutation: {
+        loginUser: async function(_, { userInput }, { res }){
+
+            const username = userInput.username
+            const password = userInput.password
+            const userType = userInput.userType
+            let signInType
+            let user
+            if(userType === 'teacher'){
+                signInType = teacherSignInType
+                user = await Teacher.findOne({where: {username: username}})
+            } else {
+                signInType = studentSignInType
+                user = await Student.findOne({where: {username: username}})
+            }
+
+            if(!user){
+                const error = new Error(`${userType} with this username does not exist!`)
+                error.code = 401
+                throw error
+            }
+    
+            const validPassword = await bcrypt.compare(password, user.password);
+            if(!validPassword) {
+                const error = new Error('Incorrect password. Please try again.');
+                error.code = 401;
+                throw error;
+            }
+
+            const acsToken = createAccessToken(user.id.toString(), signInType);
+            const rfrshToken = createRefreshToken(user.id.toString(), signInType);
+
+            sendRefreshToken(res, rfrshToken);
+    
+            return {accessToken: acsToken, userId: user.id};
+        }, 
         createTeacher: async function(_, { teacherInput }){
 
             const firstName = teacherInput.firstName;
