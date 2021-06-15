@@ -96,13 +96,19 @@ module.exports = {
             checkAuth(req, studentSignInType, STUDENT_STR)
 
             const studentClassId = req.classId
-            const classPrizes = await Prize.findOne({
+            console.log(studentClassId)
+            const classPrizes = await Prize.findAll({
                 where: {
                     classId: studentClassId
                 }
             })
 
-            return classPrizes.toJSON();
+            let prizeArray = []
+            for(prize of classPrizes){
+                prizeArray.push(prize.toJSON())
+            }
+
+            return prizeArray
         }
     },
     Mutation: {
@@ -113,12 +119,15 @@ module.exports = {
             const userType = userInput.userType
             let signInType
             let user
+            let classId
             if(userType === 'teacher'){
                 signInType = teacherSignInType
                 user = await Teacher.findOne({where: {username: username}})
+                classId = 'undefined'
             } else {
                 signInType = studentSignInType
                 user = await Student.findOne({where: {username: username}})
+                classId = user.classId
             }
 
             if(!user){
@@ -134,7 +143,7 @@ module.exports = {
                 throw error;
             }
 
-            const acsToken = createAccessToken(user.id.toString(), signInType);
+            const acsToken = createAccessToken(user.id.toString(), signInType, classId);
             const rfrshToken = createRefreshToken(user.id.toString(), signInType);
 
             sendRefreshToken(res, rfrshToken);

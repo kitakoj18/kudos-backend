@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config();
 const accessTokenSignature = process.env.A_JWT_SIGNATURE;
 const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 
-exports.createAccessToken = ( userId, userType, classId="undefined" ) =>{
+exports.createAccessToken = ( userId, userType, classId) =>{
     return jwt.sign({
         userId,
         userType,
