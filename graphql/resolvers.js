@@ -144,7 +144,7 @@ module.exports = {
             }
 
             const acsToken = createAccessToken(user.id.toString(), signInType, classId);
-            const rfrshToken = createRefreshToken(user.id.toString(), signInType);
+            const rfrshToken = createRefreshToken(user.id.toString(), signInType, classId);
 
             sendRefreshToken(res, rfrshToken);
     

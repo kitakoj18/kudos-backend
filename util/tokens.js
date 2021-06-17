@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config();
 const accessTokenSignature = process.env.A_JWT_SIGNATURE;
 const refreshTokenSignature = process.env.R_JWT_SIGNATURE;
 
-exports.createAccessToken = ( userId, userType, classId) =>{
+exports.createAccessToken = ( userId, userType, classId ) =>{
     return jwt.sign({
         userId,
         userType,
@@ -12,10 +12,11 @@ exports.createAccessToken = ( userId, userType, classId) =>{
     }, accessTokenSignature, { expiresIn: '15m' })
 }
 
-exports.createRefreshToken = ( userId, userType ) =>{
+exports.createRefreshToken = ( userId, userType, classId ) =>{
     return jwt.sign({
         userId,
-        userType
+        userType,
+        classId
     }, refreshTokenSignature, { expiresIn: '7d' })
 }
 
