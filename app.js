@@ -105,7 +105,7 @@ app.post('/refresh_token', (req, res, next) =>{
     // if not, send response where error is true and empty accessToken
 
     const newAcsToken = createAccessToken(userId, userType, classId);
-    const newRfrshToken = createRefreshToken(userId, userType);
+    const newRfrshToken = createRefreshToken(userId, userType, classId);
     sendRefreshToken(res, newRfrshToken)
 
     return res.send({ error: false, accessToken: newAcsToken })
