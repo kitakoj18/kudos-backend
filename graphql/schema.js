@@ -163,6 +163,7 @@ const typeDefs = gql`
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
         postTransaction(transactionInput: PrizeTransactionInputData): Transaction
         addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
+        cancelWish(wishId: Int!): Wish
         signS3(fileName: String!, fileType: String!): S3Payload!
     }
 `;

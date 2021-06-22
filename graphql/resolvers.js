@@ -392,6 +392,12 @@ module.exports = {
             
             student.createWish({ prizeId: wishlistInput.prizeId })
         },
+        cancelWish: async function(_, { wishId }, { req }){
+            
+            checkAuth(req, studentSignInType, STUDENT_STR)
+
+            Wish.destroy({ where: { id: wishId } })
+        },
         signS3: async function(_, { fileName, fileType }, { req }){
             
             checkAuth(req, teacherSignInType, TEACHER_STR)
