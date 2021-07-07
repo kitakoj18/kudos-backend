@@ -187,6 +187,26 @@ module.exports = {
     
             return teacher;
         },
+        editTeacher: async function(_, { teacherInput }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const teacher = await Teacher.findByPk(req.userId)
+            checkObj(teacher, TEACHER_STR, req.userId)
+
+            if(teacher.firstName !== teacherInput.firstName){
+                teacher.firstName = teacherInput.firstName
+            }
+            if(teacher.lastName !== teacherInput.lastName){
+                teacher.lastName = teacherInput.lastName
+            }
+            if(teacher.username !== teacherInput.username){
+                teacher.username = teacherInput.username
+            }
+
+            await teacher.save()
+
+        },
         createClass: async function(_, { classInput }, { req }){
     
             checkAuth(req, teacherSignInType, TEACHER_STR)

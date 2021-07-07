@@ -150,6 +150,7 @@ const typeDefs = gql`
     type Mutation {
         loginUser(userInput: UserLoginData): AuthData!
         createTeacher(teacherInput: TeacherInputData): Teacher
+        editTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
         editStudent(studentInput: StudentInputData): Student
