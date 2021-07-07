@@ -93,8 +93,9 @@ const typeDefs = gql`
     }
 
     input ClassInputData {
-        className: String!
-        imageUrl: String!
+        id: Int
+        className: String
+        imageUrl: String
     }
 
     input StudentInputData {
@@ -153,6 +154,7 @@ const typeDefs = gql`
         createTeacher(teacherInput: TeacherInputData): Teacher
         editTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
+        deleteClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
         editStudent(studentInput: StudentInputData): Student
         deleteStudents(studentInput: DeleteStudentsData): Student

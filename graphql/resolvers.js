@@ -231,6 +231,15 @@ module.exports = {
             checkObj(teacher, TEACHER_STR, req.userId)
             teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
         },
+        deleteClass: async function(_, { classInput }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const cls = await Class.findByPk(classInput.id)
+            checkObj(cls, CLASS_STR, classInput.id)
+
+            Class.destroy({ where: { id: classInput.id } })
+        },
         createStudent: async function(_, { studentInput }, { req }) {
     
             checkAuth(req, teacherSignInType, TEACHER_STR)
