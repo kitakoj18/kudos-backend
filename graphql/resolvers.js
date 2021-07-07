@@ -68,6 +68,23 @@ module.exports = {
 
             return cls.toJSON()
         },
+        getClasses: async function(_, __, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const teacherClasses = await Class.findAll({
+                where: {
+                    teacherId: req.userId
+                }
+            })
+
+            let classArray = []
+            for(cls of teacherClasses){
+                classArray.push(cls.toJSON())
+            }
+
+            return classArray
+        },
         student: async function(_, __, { req }){
     
             checkAuth(req, studentSignInType, STUDENT_STR)
@@ -96,7 +113,6 @@ module.exports = {
             checkAuth(req, studentSignInType, STUDENT_STR)
 
             const studentClassId = req.classId
-            console.log(studentClassId)
             const classPrizes = await Prize.findAll({
                 where: {
                     classId: studentClassId
