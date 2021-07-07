@@ -12,8 +12,8 @@ const typeDefs = gql`
         favoriteSubject: String
         kudosBalance: Int!
         classId: Int!
-        transactions: [Transaction]!
-        wishList: [Wish]!
+        transactions: [Transaction!]
+        wishList: [Wish!]
     }
 
     type Prize {
