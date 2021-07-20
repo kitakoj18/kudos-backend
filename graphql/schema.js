@@ -7,7 +7,7 @@ const typeDefs = gql`
         firstName: String!
         lastName: String!
         username: String!
-        imageUrl: String
+        imageUrl: String!
         biography: String
         favoriteSubject: String
         kudosBalance: Int!
@@ -87,9 +87,9 @@ const typeDefs = gql`
     input TeacherInputData {
         firstName: String
         lastName: String
-        username: String!
+        username: String
         email: String
-        password: String!
+        password: String
     }
 
     input ClassInputData {
@@ -102,8 +102,8 @@ const typeDefs = gql`
         id: Int
         firstName: String
         lastName: String
-        username: String!
-        password: String!
+        username: String
+        password: String
         imageUrl: String
         classId: Int
     }
