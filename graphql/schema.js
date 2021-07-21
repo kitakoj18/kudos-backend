@@ -7,7 +7,7 @@ const typeDefs = gql`
         firstName: String!
         lastName: String!
         username: String!
-        imageUrl: String!
+        imageUrl: String
         biography: String
         favoriteSubject: String
         kudosBalance: Int!
@@ -19,7 +19,7 @@ const typeDefs = gql`
     type Prize {
         id: Int!
         name: String!
-        imageUrl: String!
+        imageUrl: String
         description: String
         category: String
         kudosCost: Int!
@@ -32,7 +32,7 @@ const typeDefs = gql`
         approved: Boolean!
         prizeId: Int!
         prizeName: String!
-        prizeImageUrl: String!
+        prizeImageUrl: String
         prizeCost: Int!
         studentId: Int!
     }
