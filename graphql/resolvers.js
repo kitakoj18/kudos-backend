@@ -6,6 +6,7 @@ const Teacher = require('../models/teacher');
 const Class = require('../models/class');
 const Student = require('../models/student');
 const Prize = require('../models/prize');
+const Category = require('../models/category');
 const Transaction = require('../models/transaction');
 const Wish = require('../models/wish');
 
@@ -37,7 +38,8 @@ module.exports = {
                 },
                 // nested eager loading
                 include: [
-                    {model: Class}
+                    {model: Class},
+                    {model: Category}
                 ]
             });
 

@@ -61,6 +61,7 @@ const typeDefs = gql`
         imageUrl: String
         biography: String
         classes: [Class!]
+        categories: [Category!]
     }
 
     type Category {
@@ -114,7 +115,7 @@ const typeDefs = gql`
 
     input PrizeInputData {
         name: String!
-        imageUrl: String!
+        imageUrl: String
         kudosCost: Int!
         description: String
         category: String
