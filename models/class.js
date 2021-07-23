@@ -21,7 +21,10 @@ const Class = sequelize.define('class', {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: 0
-      }
+    },
+    teacherId: {
+        type: Sequelize.INTEGER
+    }
 });
 
 module.exports = Class;

@@ -26,6 +26,12 @@ const Prize = sequelize.define('prize', {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 1
+    },
+    classId: {
+        type: Sequelize.INTEGER
+    },
+    teacherId: {
+        type: Sequelize.INTEGER
     }
 });
 
