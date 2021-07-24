@@ -336,6 +336,30 @@ module.exports = {
             checkObj(teacher, TEACHER_STR, req.userId);
             teacher.createCategory({ category: categoryName });
         },
+        editCategories: async function(_, { editCategories }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            for(editCategory of editCategories){
+                const category = await Category.findByPk(editCategory.id)
+                // add checkObj check here for category
+                // replace old category field with new category name
+                const oldCategory = category.category
+                category.category = editCategory.name
+                await category.save()
+
+                // for all prizes with this category, update category name
+                Prize.update({
+                    category: editCategory.name
+                }, {
+                    where: { 
+                        teacherId: req.userId,
+                        category: oldCategory
+                    }
+                })
+            }
+            
+        },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     
             checkAuth(req, teacherSignInType, TEACHER_STR)

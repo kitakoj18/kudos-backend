@@ -21,7 +21,7 @@ const typeDefs = gql`
         name: String!
         imageUrl: String
         description: String
-        category: String
+        category: Category
         kudosCost: Int!
         quantity: Int!
         classId: Int!
@@ -133,6 +133,11 @@ const typeDefs = gql`
         newBalance: Int!
     }
 
+    input EditCategory {
+        id: Int!
+        name: String!
+    }
+
     input PrizeTransactionInputData {
         prizeId: Int!
     }
@@ -163,6 +168,7 @@ const typeDefs = gql`
         editPrize(prizeInput: PrizeInputData): Prize
         deletePrizes(prizeInput: DeletePrizesData): Prize
         createCategory(categoryName: String!): Category
+        editCategories(editCategories: [EditCategory!]!): Category
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
