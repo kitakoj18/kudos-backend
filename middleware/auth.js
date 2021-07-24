@@ -15,7 +15,9 @@ module.exports = (req, res, next) => {
         const acsToken = authHeader.split(' ')[1];
         // throws error if expired or invalid
         decodedToken = jwt.verify(acsToken, accessTokenSignature);
+
     } catch(err) {
+        console.log(err)
         req.isAuth = false;
         return next();
     }
