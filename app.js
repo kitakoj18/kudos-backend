@@ -141,6 +141,10 @@ Student.belongsTo(Class);
 Class.hasMany(Prize, {onDelete: 'CASCADE'});
 Prize.belongsTo(Class);
 
+// Prize.hasOne(Category);
+Category.hasMany(Prize)
+Prize.belongsTo(Category)
+
 Student.hasMany(Transaction);
 Transaction.belongsTo(Student);
 Transaction.belongsTo(Prize);

@@ -118,7 +118,10 @@ module.exports = {
             const classPrizes = await Prize.findAll({
                 where: {
                     classId: studentClassId
-                }
+                },
+                include: [
+                    {model: Category}
+                ]
             })
 
             let prizeArray = []
@@ -303,7 +306,7 @@ module.exports = {
                 imageUrl: prizeInput.imageUrl,
                 kudosCost: prizeInput.kudosCost,
                 description: prizeInput.description || '',
-                category: prizeInput.category || '',
+                categoryId: prizeInput.categoryId ,
                 quantity: prizeInput.quantity
             })
         },
@@ -318,7 +321,7 @@ module.exports = {
             prize.imageUrl = prizeInput.imageUrl;
             prize.kudosCost = prizeInput.kudosCost;
             prize.description = prizeInput.description || '';
-            prize.category = prizeInput.category || '';
+            prize.categoryId = prizeInput.categoryId;
             prize.quantity = prizeInput.quantity;
             await prize.save();
         },
@@ -347,16 +350,6 @@ module.exports = {
                 const oldCategory = category.category
                 category.category = editCategory.name
                 await category.save()
-
-                // for all prizes with this category, update category name
-                Prize.update({
-                    category: editCategory.name
-                }, {
-                    where: { 
-                        teacherId: req.userId,
-                        category: oldCategory
-                    }
-                })
             }
             
         },

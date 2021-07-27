@@ -21,7 +21,7 @@ const typeDefs = gql`
         name: String!
         imageUrl: String
         description: String
-        category: Category
+        category: Category!
         kudosCost: Int!
         quantity: Int!
         classId: Int!
@@ -122,6 +122,7 @@ const typeDefs = gql`
         quantity: Int!
         classId: Int
         prizeId: Int
+        categoryId: Int!
     }
 
     input DeletePrizesData {

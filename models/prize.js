@@ -16,7 +16,6 @@ const Prize = sequelize.define('prize', {
     imageUrl: Sequelize.STRING,
     imgFileName: Sequelize.STRING,
     description: Sequelize.TEXT,
-    category: Sequelize.TEXT,
     kudosCost: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -30,9 +29,7 @@ const Prize = sequelize.define('prize', {
     classId: {
         type: Sequelize.INTEGER
     },
-    teacherId: {
-        type: Sequelize.INTEGER
-    }
+    categoryId: Sequelize.INTEGER
 });
 
 module.exports = Prize;
