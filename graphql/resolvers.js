@@ -62,7 +62,11 @@ module.exports = {
                             {model: Transaction}
                         ]
                     },
-                    {model: Prize}
+                    {model: Prize,
+                        include: [
+                            {model: Category}
+                        ]
+                    }
                 ]
             });
 
