@@ -14,7 +14,6 @@ const Prize = sequelize.define('prize', {
         allowNull: false
     },
     imageUrl: Sequelize.STRING,
-    imgFileName: Sequelize.STRING,
     description: Sequelize.TEXT,
     kudosCost: {
         type: Sequelize.INTEGER,
