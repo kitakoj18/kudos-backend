@@ -367,11 +367,20 @@ module.exports = {
             }
             
         },
-        deleteCategory: async function(_, { categoryId }, { req }){
+        deleteCategory: async function(_, { categoryInput }, { req }){
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
 
+            const prizes = await Prize.findAll({
+                where: { categoryId: categoryInput.id }
+            })
 
+            for(prize of prizes){
+                prize.categoryId = categoryInput.replaceId
+                prize.save()
+            }
+
+            Category.destroy({where: { id: categoryInput.id } })
         },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     

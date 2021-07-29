@@ -139,6 +139,11 @@ const typeDefs = gql`
         name: String!
     }
 
+    input DeleteCategoryData {
+        id: Int!
+        replaceId: Int!
+    }
+
     input PrizeTransactionInputData {
         prizeId: Int!
     }
@@ -171,7 +176,7 @@ const typeDefs = gql`
         deletePrizes(prizeInput: DeletePrizesData): Prize
         createCategory(categoryName: String!): Category
         editCategories(editCategories: [EditCategory!]!): Category
-        deleteCategory(categoryId: Int!): Category
+        deleteCategory(categoryInput: DeleteCategoryData): Category
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
