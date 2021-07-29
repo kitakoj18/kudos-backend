@@ -240,6 +240,18 @@ module.exports = {
             checkObj(teacher, TEACHER_STR, req.userId)
             teacher.createClass({className: classInput.className, imageUrl: classInput.imageUrl});
         },
+        editClasses: async function(_, { classInput }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            for(editClass of classInput){
+                const cls = await Class.findByPk(editClass.id)
+
+                cls.className = editClass.className
+                await cls.save()
+            }
+
+        },
         deleteClass: async function(_, { classInput }, { req }){
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
@@ -350,12 +362,16 @@ module.exports = {
             for(editCategory of editCategories){
                 const category = await Category.findByPk(editCategory.id)
                 // add checkObj check here for category
-                // replace old category field with new category name
-                const oldCategory = category.category
                 category.category = editCategory.name
                 await category.save()
             }
             
+        },
+        deleteCategory: async function(_, { categoryId }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+
         },
         adjustStudentBalance: async function(_, { adjustedBalanceData }, { req }){
     

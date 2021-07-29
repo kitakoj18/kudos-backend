@@ -161,6 +161,7 @@ const typeDefs = gql`
         createTeacher(teacherInput: TeacherInputData): Teacher
         editTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
+        editClasses(classInput: [ClassInputData]!): Class
         deleteClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
         editStudent(studentInput: StudentInputData): Student
@@ -170,6 +171,7 @@ const typeDefs = gql`
         deletePrizes(prizeInput: DeletePrizesData): Prize
         createCategory(categoryName: String!): Category
         editCategories(editCategories: [EditCategory!]!): Category
+        deleteCategory(categoryId: Int!): Category
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
