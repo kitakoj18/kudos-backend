@@ -99,6 +99,11 @@ const typeDefs = gql`
         imageUrl: String
     }
 
+    input EditClassInput {
+        id: Int!
+        className: String!
+    }
+
     input StudentInputData {
         id: Int
         firstName: String
@@ -166,7 +171,7 @@ const typeDefs = gql`
         createTeacher(teacherInput: TeacherInputData): Teacher
         editTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
-        editClasses(classInput: [ClassInputData]!): Class
+        editClasses(classInput: [EditClassInput]!): [Class]
         deleteClass(classInput: ClassInputData): Class
         createStudent(studentInput: StudentInputData): Student
         editStudent(studentInput: StudentInputData): Student
