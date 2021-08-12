@@ -187,7 +187,7 @@ const typeDefs = gql`
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
         postTransaction(transactionInput: PrizeTransactionInputData): Transaction
         addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
-        cancelWish(wishId: Int!): Wish
+        cancelOrBuyWish(wishId: Int!, prizeId: Int!, actionType: String!): Wish
         signS3(fileName: String!, fileType: String!): S3Payload!
     }
 `;

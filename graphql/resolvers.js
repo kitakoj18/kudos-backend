@@ -485,11 +485,57 @@ module.exports = {
             
             student.createWish({ prizeId: wishlistInput.prizeId })
         },
-        cancelWish: async function(_, { wishId }, { req }){
+        cancelOrBuyWish: async function(_, { wishId, prizeId, actionType }, { req }){
             
             checkAuth(req, studentSignInType, STUDENT_STR)
 
-            Wish.destroy({ where: { id: wishId } })
+            if(actionType === 'CANCEL'){
+                Wish.destroy({ where: { id: wishId } })
+            }
+            if(actionType === 'BUY'){
+                const student = await Student.findByPk(req.userId);
+                checkObj(student, STUDENT_STR, req.userId)
+        
+                // get student class and check if treasurebox is open before moving forward with transaction
+                const studentClass = await Class.findByPk(student.classId);
+                checkObj(studentClass, CLASS_STR, student.classId)
+        
+                if(!studentClass.treasureBoxOpen){
+                    const error = new Error('The treasure box for your class is currently not open!');
+                    error.code = 404;
+                    throw error;
+                }
+        
+                const prize = await Prize.findByPk(prizeId);
+                if(!prize){
+                    const error = new Error(`Something went wrong! No prize with id ${prizeId} can be found`)
+                    throw error
+                }
+                if(prize.quantity < 1){
+                    const error = new Error(`I'm sorry! The prize ${prize.name} is not available right now. Please try again later!`);
+                    error.code = 404;
+                    throw error;
+                }
+
+                if(student.kudosBalance < prize.kudosCost){
+                    const error = new Error("I'm sorry! You do not have enough kudos to buy this prize!")
+                    error.code = 404
+                    throw error
+                }
+                
+                // create transaction tied to the student
+                student.createTransaction({ 
+                    prizeId: prizeId, 
+                    prizeName: prize.name, 
+                    prizeImageUrl: prize.imageUrl, 
+                    prizeCost: prize.kudosCost,
+                    classId: student.classId
+                });
+
+                // remove wish from wishlist after transaction
+                Wish.destroy({ where: { id: wishId } })
+            }
+
         },
         signS3: async function(_, { fileName, fileType }, { req }){
             
