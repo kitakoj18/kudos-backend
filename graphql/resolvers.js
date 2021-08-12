@@ -355,11 +355,11 @@ module.exports = {
             checkObj(teacher, TEACHER_STR, req.userId);
             teacher.createCategory({ category: categoryName });
         },
-        editCategories: async function(_, { editCategories }, { req }){
+        editCategories: async function(_, { categoryInput }, { req }){
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
 
-            for(editCategory of editCategories){
+            for(editCategory of categoryInput){
                 const category = await Category.findByPk(editCategory.id)
                 // add checkObj check here for category
                 category.category = editCategory.name

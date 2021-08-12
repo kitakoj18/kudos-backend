@@ -180,7 +180,7 @@ const typeDefs = gql`
         editPrize(prizeInput: PrizeInputData): Prize
         deletePrizes(prizeInput: DeletePrizesData): Prize
         createCategory(categoryName: String!): Category
-        editCategories(editCategories: [EditCategory!]!): Category
+        editCategories(categoryInput: [EditCategory]!): [Category]
         deleteCategory(categoryInput: DeleteCategoryData): Category
         adjustStudentBalance(adjustedBalanceData: AdjustedBalance): Student!
         toggleTreasureBox(classId: Int!): Boolean
