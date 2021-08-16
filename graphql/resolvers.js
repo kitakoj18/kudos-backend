@@ -430,8 +430,8 @@ module.exports = {
     
             prize.quantity += 1;
             await prize.save();
-    
-            return transaction;
+
+            Transaction.destroy({ where: { id: approveInput.transactionId } })
         },
         postTransaction: async function(_, { transactionInput }, { req }){
     
@@ -506,9 +506,9 @@ module.exports = {
                     throw error;
                 }
         
-                const prize = await Prize.findByPk(prizeId);
+                const prize = await Prize.findByPk(transactionInput.prizeId);
                 if(!prize){
-                    const error = new Error(`Something went wrong! No prize with id ${prizeId} can be found`)
+                    const error = new Error(`Something went wrong! No prize with id ${transactionInput.prizeId} can be found`)
                     throw error
                 }
                 if(prize.quantity < 1){
@@ -525,7 +525,7 @@ module.exports = {
                 
                 // create transaction tied to the student
                 student.createTransaction({ 
-                    prizeId: prizeId, 
+                    prizeId: transactionInput.prizeId, 
                     prizeName: prize.name, 
                     prizeImageUrl: prize.imageUrl, 
                     prizeCost: prize.kudosCost,
