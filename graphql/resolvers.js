@@ -476,6 +476,12 @@ module.exports = {
             await prize.save();
 
         },
+        cancelTransaction: async function(_, { transactionId }, { req }){
+
+            checkAuth(req, studentSignInType, STUDENT_STR)
+
+            Transaction.destroy({ where: { id: transactionId } })
+        },
         addToWishlist: async function(_, { wishlistInput }, { req }){
             
             checkAuth(req, studentSignInType, STUDENT_STR)
