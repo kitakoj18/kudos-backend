@@ -40,7 +40,7 @@ const typeDefs = gql`
     type Wish {
         id: Int!
         studentId: Int!
-        prizeId: Int!
+        prize: Prize!
     }
 
     type Class {
