@@ -11,7 +11,7 @@ const typeDefs = gql`
         biography: String
         favoriteSubject: String
         kudosBalance: Int!
-        classId: Int!
+        class: Class!
         transactions: [Transaction!]
         wishes: [Wish!]
     }

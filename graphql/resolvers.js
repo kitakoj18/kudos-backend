@@ -102,7 +102,8 @@ module.exports = {
                 },
                 include: [
                     {model: Transaction},
-                    {model: Wish}
+                    {model: Wish},
+                    {model: Class}
                 ]
             });
 
