@@ -13,7 +13,7 @@ const typeDefs = gql`
         kudosBalance: Int!
         classId: Int!
         transactions: [Transaction!]
-        wishList: [Wish!]
+        wishes: [Wish!]
     }
 
     type Prize {
@@ -39,7 +39,8 @@ const typeDefs = gql`
 
     type Wish {
         id: Int!
-        prizeAvailable: Boolean!
+        studentId: Int!
+        prizeId: Int!
     }
 
     type Class {

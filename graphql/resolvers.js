@@ -101,12 +101,8 @@ module.exports = {
                    id: studentId 
                 },
                 include: [
-                    {
-                        model: Transaction
-                    },
-                    {
-                        model: Wish
-                    }
+                    {model: Transaction},
+                    {model: Wish}
                 ]
             });
 
