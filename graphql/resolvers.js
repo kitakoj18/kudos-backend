@@ -180,6 +180,9 @@ module.exports = {
     
             return {accessToken: acsToken, userId: user.id};
         }, 
+        logoutUser: async function(_, __, { res }){
+            sendRefreshToken(res, '')
+        },
         createTeacher: async function(_, { teacherInput }){
 
             const firstName = teacherInput.firstName;

@@ -169,6 +169,7 @@ const typeDefs = gql`
 
     type Mutation {
         loginUser(userInput: UserLoginData): AuthData!
+        logoutUser: AuthData
         createTeacher(teacherInput: TeacherInputData): Teacher
         editTeacher(teacherInput: TeacherInputData): Teacher
         createClass(classInput: ClassInputData): Class
