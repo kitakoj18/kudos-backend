@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const aws = require('aws-sdk');
 
 const Teacher = require('../models/teacher');
@@ -90,6 +89,42 @@ module.exports = {
             }
 
             return classArray
+        },
+        getTransactions: async function (_, { classId }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            if(classId){
+                const transactions = await Transaction.findAll({
+                    where: {
+                       classId: classId 
+                    },
+                    raw: true
+                })
+
+                return transactions
+            }
+            
+            const teacherClassIds = await Class.findAll({
+                where: {
+                    teacherId: req.userId
+                },
+                attributes: ['id'],
+                raw: true
+            })
+
+            let transactionArray = []
+            for(teacherClassId of teacherClassIds){
+                const transactions = await Transaction.findAll({
+                    where: {
+                        classId: teacherClassId.id
+                    },
+                    raw: true
+                })
+                transactionArray.push(...transactions)
+            }
+
+            return transactionArray
         },
         student: async function(_, __, { req }){
     

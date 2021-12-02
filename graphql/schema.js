@@ -163,6 +163,7 @@ const typeDefs = gql`
         teacher: Teacher!
         getClassInfo(classId: Int!): Class!
         getClasses: [Class]!
+        getTransactions(classId: Int): [Transaction]!
         student: Student!
         getClassPrizes: [Prize]!
     }
