@@ -80,15 +80,11 @@ module.exports = {
             const teacherClasses = await Class.findAll({
                 where: {
                     teacherId: req.userId
-                }
+                }, 
+                raw: true
             })
 
-            let classArray = []
-            for(cls of teacherClasses){
-                classArray.push(cls.toJSON())
-            }
-
-            return classArray
+            return teacherClasses
         },
         getTransactions: async function (_, { classId }, { req }){
 
@@ -165,15 +161,11 @@ module.exports = {
                 },
                 include: [
                     {model: Category}
-                ]
+                ],
+                raw: true
             })
 
-            let prizeArray = []
-            for(prize of classPrizes){
-                prizeArray.push(prize.toJSON())
-            }
-
-            return prizeArray
+            return classPrizes
         }
     },
     Mutation: {
