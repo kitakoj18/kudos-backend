@@ -90,15 +90,20 @@ module.exports = {
 
             checkAuth(req, teacherSignInType, TEACHER_STR)
 
+            let transactionArray = []
             if(classId){
                 const transactions = await Transaction.findAll({
                     where: {
                        classId: classId 
                     },
-                    raw: true
+                    include: [
+                        {model: Student}
+                    ]
                 })
 
-                return transactions
+                transactionArray.push(...transactions)
+
+                return transactionArray
             }
             
             const teacherClassIds = await Class.findAll({
@@ -109,13 +114,14 @@ module.exports = {
                 raw: true
             })
 
-            let transactionArray = []
             for(teacherClassId of teacherClassIds){
                 const transactions = await Transaction.findAll({
                     where: {
                         classId: teacherClassId.id
                     },
-                    raw: true
+                    include: [
+                        {model: Student}
+                    ],
                 })
                 transactionArray.push(...transactions)
             }
