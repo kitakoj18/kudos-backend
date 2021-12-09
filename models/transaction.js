@@ -34,6 +34,10 @@ const Transaction = sequelize.define('transaction', {
   },
   classId: {
     type: Sequelize.INTEGER
+  },
+  givenDate: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 });
 
