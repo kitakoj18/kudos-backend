@@ -37,6 +37,7 @@ const typeDefs = gql`
         prizeCost: Int!
         student: Student!
         createdAt: Date!
+        givenDate: Date
     }
 
     type Wish {
