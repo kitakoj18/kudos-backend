@@ -24,6 +24,8 @@ let PRIZE_STR = 'prize'
 
 const s3Bucket = process.env.AWS_S3BUCKET;
 
+const { GraphQLScalarType, Kind } = require('graphql');
+
 module.exports = {
     Query: {
         teacher: async function(_, __, { req }){
@@ -606,5 +608,21 @@ module.exports = {
 
             return { signedRequest, url }
         }
-    }
+    },
+    Date: new GraphQLScalarType({
+        name: 'Date',
+        description: 'Date scalar',
+        parseValue(value) {
+            return value
+        },
+        serialize(value) {
+            return new Date(value)
+        },
+        parseLiteral(ast) {
+            if(ast.kind === KIND.INT) {
+                return new Date(parseInt(ast.value, 10))
+            }
+            return null
+        }
+    })
 };

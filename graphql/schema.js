@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+    scalar Date
 
     type Student {
         id: Int!
@@ -35,6 +36,7 @@ const typeDefs = gql`
         prizeImageUrl: String
         prizeCost: Int!
         student: Student!
+        createdAt: Date!
     }
 
     type Wish {
