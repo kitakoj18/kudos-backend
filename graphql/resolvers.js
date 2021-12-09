@@ -525,6 +525,16 @@ module.exports = {
 
             Transaction.destroy({ where: { id: transactionId } })
         },
+        markTransactionGiven: async function(_, { transactionId }, { req }){
+
+            checkAuth(req, teacherSignInType, TEACHER_STR)
+
+            const transaction = await Transaction.findByPk(transactionId)
+
+            const givenDate = new Date()
+            transaction.givenDate = givenDate
+            await transaction.save()
+        },
         addToWishlist: async function(_, { wishlistInput }, { req }){
             
             checkAuth(req, studentSignInType, STUDENT_STR)

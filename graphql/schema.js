@@ -192,6 +192,7 @@ const typeDefs = gql`
         approveTransaction(approveInput: ApproveTransactionInputData): Transaction
         postTransaction(transactionInput: PrizeTransactionInputData): Transaction
         cancelTransaction(transactionId: Int!): Transaction
+        markTransactionGiven(transactionId: Int!): Transaction
         addToWishlist(wishlistInput: PrizeTransactionInputData): Prize
         cancelOrBuyWish(wishId: Int!, prizeId: Int!, actionType: String!): Wish
         signS3(fileName: String!, fileType: String!): S3Payload!
