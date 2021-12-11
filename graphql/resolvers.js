@@ -170,7 +170,6 @@ module.exports = {
                 include: [
                     {model: Category}
                 ],
-                raw: true
             })
 
             return classPrizes
