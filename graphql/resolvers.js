@@ -251,6 +251,10 @@ module.exports = {
                 email: email,
                 password: hashedPw
             });
+
+            // Create a default toy category for new teacher
+            // Need to apply better method to do this
+            teacher.createCategory({ category: 'Toy' });
     
             return teacher;
         },
