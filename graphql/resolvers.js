@@ -349,7 +349,7 @@ module.exports = {
                 const hashedPw = await bcrypt.hash(studentInput.password, 12);
                 student.password = hashedPw
             }
-            
+
             await student.save();
             
         },
@@ -602,7 +602,7 @@ module.exports = {
             }
 
         },
-        signS3: async function(_, { fileName, fileType }, { req }){
+        signS3: async function(_, { fileName }, { req }){
             
             checkAuth(req, teacherSignInType, TEACHER_STR)
 
@@ -611,12 +611,17 @@ module.exports = {
                 region: 'us-west-1'
             })
 
+            const credentials = {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+            }
+
+            aws.config.update({ credentials: credentials, region: 'us-west-1' })
+
             const s3Params = {
                 Bucket: s3Bucket,
                 Key: fileName,
                 Expires: 60,
-                ContentType: fileType,
-                ACL: 'public-read'
             }
 
             const signedRequest = await s3.getSignedUrl('putObject', s3Params)
