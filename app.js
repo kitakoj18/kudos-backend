@@ -36,7 +36,7 @@ const server = new ApolloServer({
 
 const app = express();
 
-const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000']
+const whitelist = ['http://localhost:8000', 'http://104.32.92.60:8000', 'https://kudos-points-manager.netlify.app']
 const corsOptionsDelegate = function(req, cb){
     let corsOptions;
     // console.log(req.header('Origin'))
