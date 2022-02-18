@@ -462,6 +462,7 @@ module.exports = {
     
             // if transaction is approved by teacher, change status to approved
             if (approveInput.transactionApproved === true){
+                // prize quantity is deducted when student submits request to buy
                 transaction.approved = 1;
                 await transaction.save();
                 return transaction;
@@ -471,7 +472,7 @@ module.exports = {
             // do we want to delete this transaction completely from the database?
             const studentId = transaction.studentId;
             const prizeId = transaction.prizeId;
-    
+            
             const student = await Student.findByPk(studentId);
             const prize = await Prize.findByPk(prizeId);
             student.kudosBalance += prize.kudosCost;
@@ -502,6 +503,8 @@ module.exports = {
             const prize = await Prize.findByPk(transactionInput.prizeId);
             if(!prize){
                 const error = new Error(`Something went wrong! No prize with id ${transactionInput.prizeId} can be found`)
+                error.code = 404
+                throw error;
             }
             if(prize.quantity < 1){
                 const error = new Error(`I'm sorry! The prize ${prize.name} is not available right now. Please try again later!`);
@@ -526,8 +529,20 @@ module.exports = {
 
         },
         cancelTransaction: async function(_, { transactionId }, { req }){
-
+            
             checkAuth(req, studentSignInType, STUDENT_STR)
+
+            const transaction = await Transaction.findByPk(transactionId)
+            const transactionCost = transaction.prizeCost
+
+            const student = await Student.findByPk(req.userId)
+            student.kudosBalance += transactionCost
+            await student.save()
+
+            const prizeId = transaction.prizeId;
+            const prize = await Prize.findByPk(prizeId);
+            prize.quantity += 1
+            await prize.save()
 
             Transaction.destroy({ where: { id: transactionId } })
         },
@@ -554,12 +569,15 @@ module.exports = {
             
             checkAuth(req, studentSignInType, STUDENT_STR)
 
+            const student = await Student.findByPk(req.userId);
+            checkObj(student, STUDENT_STR, req.userId)
+
+            const prize = await Prize.findByPk(prizeId);
+
             if(actionType === 'CANCEL'){
                 Wish.destroy({ where: { id: wishId } })
             }
             if(actionType === 'BUY'){
-                const student = await Student.findByPk(req.userId);
-                checkObj(student, STUDENT_STR, req.userId)
         
                 // get student class and check if treasurebox is open before moving forward with transaction
                 const studentClass = await Class.findByPk(student.classId);
@@ -570,10 +588,9 @@ module.exports = {
                     error.code = 404;
                     throw error;
                 }
-        
-                const prize = await Prize.findByPk(transactionInput.prizeId);
+                
                 if(!prize){
-                    const error = new Error(`Something went wrong! No prize with id ${transactionInput.prizeId} can be found`)
+                    const error = new Error(`Something went wrong! No prize with id ${prizeId} can be found`)
                     throw error
                 }
                 if(prize.quantity < 1){
@@ -590,7 +607,7 @@ module.exports = {
                 
                 // create transaction tied to the student
                 student.createTransaction({ 
-                    prizeId: transactionInput.prizeId, 
+                    prizeId: prizeId, 
                     prizeName: prize.name, 
                     prizeImageUrl: prize.imageUrl, 
                     prizeCost: prize.kudosCost,
